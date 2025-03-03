@@ -1,63 +1,62 @@
 <script setup lang="ts">
 import { reactive, computed } from "vue";
-import {router} from "@/router";
 import {
   EditOutlined,
   EyeOutlined,
   MoreOutlined,
   DeleteOutlined
 } from '@ant-design/icons-vue';
+import {router} from "@/router";
 import {ElMessage, ElMessageBox} from "element-plus";
-import {removeStudent} from "@/api/students";
-import type {Student} from "@/interface/students";
+import {removeClass} from "@/api/classes";
+import type {Class} from "@/interface/classes";
 import type {IPagination} from "@/interface/shared";
 import { defineProps} from "vue";
 
 
 const headers = reactive([
   { title: '#', key: 'index' },
-  { title: 'STUDENT NAME', key: 'name' },
-  { title: 'CLASS', key: 'class_id' },
-  { title: 'AGE', key: 'age' },
-  { title: 'PARENT', key: 'parent' },
+  { title: 'NAME', key: 'name' },
+  { title: 'CLASS TEACHER', key: 'teacher_id' },
   { title: 'ACTION', key: 'action' },
 
 ]);
 
-const emit = defineEmits(['form:cancel','refresh-student']);
+const emit = defineEmits(['form:cancel','refresh-class']);
 const props = defineProps<{
   loading: boolean
-  students: Student[]
+  classes: Class[]
   pagination: IPagination
 }>()
 
 
-const formattedStudents = computed(() => {
-  if (!props.students || !props.students) {
+const formattedClasses = computed(() => {
+  if (!props.classes || !props.classes) {
    
     return [];
   }
-  return props.students.map((student: any, index: number) => ({
-    ...student,
+  return props.classes.map((classs: any, index: number) => ({
+    ...classs,
     index: index + 1,
+    teacher_id: classs?.teacher?.name,
   }));
 });
 
 
 const searcher = () => {
-  emit('refresh-student')
+  emit('refresh-class')
 }
 
 const handleViewItem = (id: string) => {
-  router.push(`/view/student/${id}`)
+  router.push(`/view/class/${id}`)
 };
 const handleEditItem =  (id: string) => {
-  router.push(`/edit/student/${id}`)
+  router.push(`/edit/class/${id}`)
 };
-const handleDeleteItem = (student: any) => {
+const handleDeleteItem = (classs: any) => {
   ElMessageBox.confirm(
-      `Delete #${student.name} will be deleted. Continue ?`,
-      'Delete Student',
+      `Delete #${classs.name} will be deleted. Continue ?`,
+      'Delete Class',
       {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
@@ -66,13 +65,13 @@ const handleDeleteItem = (student: any) => {
       }
   )
       .then(async () => {
-        const response = await removeStudent(student.id);
+        const response = await removeClass(classs.id);
         if (response.data.success) {
           ElMessage({
             type: 'success',
             message: response.data.message,
           });
-          emit('refresh-student');
+          emit('refresh-class');
         }
         else {
           ElMessage({
@@ -88,7 +87,7 @@ const handleDeleteItem = (student: any) => {
 <template>
   <VDataTable
       :headers="headers"
-      :items="formattedStudents"
+      :items="formattedClasses"
       :loading="props.loading"
       :items-per-page="pagination.per_page"
       height="500"

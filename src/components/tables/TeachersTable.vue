@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import { reactive, computed } from "vue";
+import {
+  EditOutlined,
+  EyeOutlined,
+  MoreOutlined,
+  DeleteOutlined
+} from '@ant-design/icons-vue';
 import {router} from "@/router";
 import {ElMessage, ElMessageBox} from "element-plus";
-import {removeStudent} from "@/api/students";
+import {removeTeacher} from "@/api/teachers";
 import type {Teacher} from "@/interface/teachers";
 import type {IPagination} from "@/interface/shared";
 import { defineProps} from "vue";
@@ -60,7 +66,7 @@ const handleDeleteItem = (teacher: any) => {
       }
   )
       .then(async () => {
-        const response = await removeStudent(teacher.id);
+        const response = await removeTeacher(teacher.id);
         if (response.data.success) {
           ElMessage({
             type: 'success',

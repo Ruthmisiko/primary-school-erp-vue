@@ -73,6 +73,28 @@ const MainRoutes = {
       path: '/teachers',
       component: () => import('@/views/pages/TeachersPage.vue')
     },
+    {
+      name: 'teacher form',
+      path: '/teacher/form',
+      component: () => import('@/components/forms/TeacherForm.vue')
+    },
+    {
+      name: 'Update Teacher form',
+      path: '/edit/teacher/:id',
+      component: () => import('@/components/forms/TeacherForm.vue')
+    },
+
+    {
+      name: 'classes',
+      path: '/classes',
+      component: () => import('@/views/pages/ClassesPage.vue')
+    },
+
+    {
+      name: 'class form',
+      path: '/class/form',
+      component: () => import('@/components/forms/ClassForm.vue')
+    },
   ]
 };
 

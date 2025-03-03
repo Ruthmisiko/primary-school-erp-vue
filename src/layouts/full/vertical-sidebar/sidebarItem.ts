@@ -1,15 +1,23 @@
 import {
   CircleIcon,
-  WindmillIcon,
-  TypographyIcon,
-  ShadowIcon,
-  PaletteIcon,
-  KeyIcon,
-  BugIcon,
   DashboardIcon,
-  BrandChromeIcon,
-  HelpIcon
 } from 'vue-tabler-icons';
+
+import {
+  DashboardOutlined,
+  FontSizeOutlined,
+  SettingOutlined,
+  UsergroupAddOutlined,
+  LineChartOutlined,
+  RadiusBottomleftOutlined,
+  ControlOutlined,
+  BgColorsOutlined,
+  ShoppingOutlined,
+  AppstoreAddOutlined,
+  UnorderedListOutlined,
+  UserSwitchOutlined,
+  BarsOutlined, MailOutlined, SolutionOutlined
+} from '@ant-design/icons-vue';
 
 export interface menu {
   header?: string;
@@ -38,13 +46,14 @@ const sidebarItem: menu[] = [
   { header: 'Students Management' },
   {
     title: 'Students',
+    icon: UsergroupAddOutlined,
     to: '/students'
   },
   { divider: true },
   { header: 'Teachers Management' },
   {
     title: 'Teachers',
-    icon: ShadowIcon,
+    icon:   UserSwitchOutlined,
     to: '/teachers'
   },
   { divider: true },
@@ -56,29 +65,31 @@ const sidebarItem: menu[] = [
   },
   {
     title: 'Subjects',
+    icon: LineChartOutlined,
     to: '/subjects'
   },
   { divider: true },
   { header: 'Exams Management' },
   {
     title: 'Exams',
-    icon: PaletteIcon,
+    icon: BarsOutlined,
     to: '/exams'
   },
   {
     title: 'Reports',
-    icon: TypographyIcon,
+    icon: BarsOutlined,
     to: '/reports'
   },
   {
     title: 'Results',
-    icon: KeyIcon,
+    icon: SolutionOutlined,
     to: '/results'
   },
   { divider: true },
   { header: 'User Profile' },
   {
     title: 'Profile',
+    icon:   UserSwitchOutlined,
     to: '/profile'
   },
   // { header: 'Pages' },
@@ -140,18 +151,7 @@ const sidebarItem: menu[] = [
   //   ]
   // },
   
-  { divider: true },
-  {
-    title: 'Sample Page',
-    icon: BrandChromeIcon,
-    to: '/starter'
-  },
-  {
-    title: 'Documentation',
-    icon: HelpIcon,
-    to: 'https://codedthemes.gitbook.io/berry-vuetify/',
-    type: 'external'
-  }
+ 
 ];
 
 export default sidebarItem;

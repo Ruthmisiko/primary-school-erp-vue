@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import {ref, shallowRef, onMounted, reactive} from 'vue';
 import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
-import StudentsTable from "@/components/tables/StudentsTable.vue";
-import { fetchStudents} from "@/api/students";
+import TeachersTable from "@/components/tables/TeachersTable.vue";
+import { fetchTeachers} from "@/api/teachers";
 import { useRoute } from "vue-router";
 import {router} from "@/router";
-import type {Student} from "@/interface/students";
+import type {Teacher} from "@/interface/teachers";
 import type {IFilter, IPagination} from "@/interface/shared";
 
 const route = useRoute();
@@ -13,7 +13,7 @@ const loading = ref(true);
 const searchField = ref('')
 const showFilter = ref(true);
 const dialog = ref(false);
-const students = ref<Student[]>([])
+const teachers = ref<Teacher[]>([])
 const page = ref({ title: 'Teachers' });
 const pagination = reactive<IPagination>({
   total: 0,
@@ -41,43 +41,18 @@ onMounted(() => {
 })
 
 const handleCreateItem = () => {
-  router.replace(route.query.to ? String(route.query.to) : '/student/form');
+  router.replace(route.query.to ? String(route.query.to) : '/teacher/form');
 };
-const loadDataa = async (filter: IFilter) => {
-  loading.value = true
 
-  try {
-    const response = await fetchStudents(filter) 
-    const data = response.data?.data
-    students.value = response.data?.data;
-    if (data.per_page && data.total && data.current_page) {
-      pagination.per_page = data.per_page ?? 0;
-      pagination.total = data.total ?? 0;
-      pagination.current_page = data.current_page;
-
-      pagination.total_pages = (pagination.per_page > 0 && pagination.total > 0)
-          ? Math.ceil(pagination.total / pagination.per_page)
-          : 0;
-    } else {
-      pagination.total_pages = 0;
-    }
-  }
-  catch (error) {
-    console.log(error)
-  }
-  finally {
-    loading.value = false
-  }
-}
 const loadData = async (filter: IFilter) => {
   loading.value = true;
   try {
-    const response = await fetchStudents(filter);
+    const response = await fetchTeachers(filter);
    
     if (response.data?.data) {
-      students.value = response.data.data; 
+      teachers.value = response.data.data; 
     } else {
-      students.value = [];
+      teachers.value = [];
     }
 
     const data = response.data;
@@ -86,7 +61,7 @@ const loadData = async (filter: IFilter) => {
     pagination.current_page = data.current_page ?? 1;
     pagination.total_pages = pagination.per_page > 0 ? Math.ceil(pagination.total / pagination.per_page) : 0;
   } catch (error) {
-    console.error("Error fetching customers:", error);
+    console.error("Error fetching teachers:", error);
   } finally {
     loading.value = false;
   }
@@ -175,8 +150,8 @@ const handleClear = () => {
         </VCardItem>
         <VCardText class="pa-0 pb-5">
           <VDivider />
-          <StudentsTable
-            :students="students"
+          <TeachersTable
+            :teachers="teachers"
             :pagination="pagination"
             :dialog="dialog"
             :loading="loading"
