@@ -48,9 +48,30 @@ const MainRoutes = {
     },
 
     {
-      name: 'customers',
-      path: '/customers',
+      name: 'students',
+      path: '/students',
       component: () => import('@/views/pages/StudentsPage.vue')
+    },
+
+    {
+      name: 'student form',
+      path: '/student/form',
+      component: () => import('@/components/forms/StudentForm.vue')
+    },
+     {
+      name: 'Update Student form',
+      path: '/edit/student/:id',
+      component: () => import('@/components/forms/StudentForm.vue')
+    },
+    {
+      name: 'view student',
+      path: '/view/student/:id',
+      component: () => import('@/components/views/viewStudent.vue')
+    },
+    {
+      name: 'teachers',
+      path: '/teachers',
+      component: () => import('@/views/pages/TeachersPage.vue')
     },
   ]
 };

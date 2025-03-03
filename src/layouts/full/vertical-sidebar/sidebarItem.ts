@@ -41,29 +41,69 @@ const sidebarItem: menu[] = [
     to: '/students'
   },
   { divider: true },
-  { header: 'Pages' },
+  { header: 'Teachers Management' },
   {
-    title: 'Authentication',
+    title: 'Teachers',
+    icon: ShadowIcon,
+    to: '/teachers'
+  },
+  { divider: true },
+  { header: 'Class Management' },
+  {
+    title: 'Classes',
+    icon: CircleIcon,
+    to: '/classes'
+  },
+  {
+    title: 'Subjects',
+    to: '/subjects'
+  },
+  { divider: true },
+  { header: 'Exams Management' },
+  {
+    title: 'Exams',
+    icon: PaletteIcon,
+    to: '/exams'
+  },
+  {
+    title: 'Reports',
+    icon: TypographyIcon,
+    to: '/reports'
+  },
+  {
+    title: 'Results',
     icon: KeyIcon,
-    to: '/auth',
-    children: [
-      {
-        title: 'Login',
-        icon: CircleIcon,
-        to: '/login1'
-      },
-      {
-        title: 'Register',
-        icon: CircleIcon,
-        to: '/register'
-      }
-    ]
+    to: '/results'
   },
+  { divider: true },
+  { header: 'User Profile' },
   {
-    title: 'Error 404',
-    icon: BugIcon,
-    to: '/error'
+    title: 'Profile',
+    to: '/profile'
   },
+  // { header: 'Pages' },
+  // {
+  //   title: 'Authentication',
+  //   icon: KeyIcon,
+  //   to: '/auth',
+  //   children: [
+  //     {
+  //       title: 'Login',
+  //       icon: CircleIcon,
+  //       to: '/login1'
+  //     },
+  //     {
+  //       title: 'Register',
+  //       icon: CircleIcon,
+  //       to: '/register'
+  //     }
+  //   ]
+  // },
+  // {
+  //   title: 'Error 404',
+  //   icon: BugIcon,
+  //   to: '/error'
+  // },
   // { divider: true },
   // { header: 'Utilities' },
   // {

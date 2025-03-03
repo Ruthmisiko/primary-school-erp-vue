@@ -1,0 +1,315 @@
+<script setup lang="ts">
+import {onMounted, reactive, ref, shallowRef} from 'vue';
+
+import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
+import {addStudent , updateStudent , getStudent} from "@/api/students";
+import {useRoute, useRouter} from "vue-router";
+import {ElNotification} from "element-plus";
+import { VueTelInput } from 'vue-tel-input'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
+import type { Student } from '@/interface/students';
+
+
+const sub_loading = ref(false)
+const loading = ref(false)
+const route = useRoute()
+const refStudentForm = ref()
+const router = useRouter();
+const page = ref({ title: 'Student Form' });
+const breadcrumbs = shallowRef([
+  {
+    title: 'Students',
+    disabled: false,
+    href: '#'
+  },
+  {
+    title: 'Student Form',
+    disabled: true,
+    href: '#'
+  }
+]);
+
+const form = reactive<Student>({
+  id:'',
+  name: '',
+  class_id: 0,
+  parent: '',
+  age: 0,
+  fee_balance: 0,
+  paid_fee: 0,
+  sclass:[],
+  results:[]
+
+})
+
+const phoneBindingProps = {
+  mode: 'international',
+  styleClasses: 'has-default',
+  defaultCountry: 'KE',
+  onlyCountries: ['KE', 'RW', 'UG', 'TZ', 'ET', 'BW'],
+  inputOptions: {
+    showDialCode: false,
+    placeholder: 'Mobile Number',
+    name: 'phone',
+  },
+}
+const checkMobileNumber = (event: any) => {
+  if (event.valid)
+    phoneBindingProps.styleClasses = ''
+
+  else
+    phoneBindingProps.styleClasses = 'v-input--error'
+}
+
+onMounted(async () => {
+
+  form.id = <string>route.params.uuid
+  if(form.id){
+    await fetchStudent();
+  }
+
+})
+
+const fetchStudent = async () => {
+  loading.value = true
+  try {
+    getStudent(form.id).then(response => {
+      if (response?.data?.success) {
+        form.name=response?.data?.data?.name;
+        form.class_id=response?.data?.data?.class_id;
+        form.parent=response?.data?.data?.parent;
+        form.age=response?.data?.data?.age;
+        form.fee_balance=response?.data?.data?.fee_balance;
+        form.paid_fee=response?.data?.data?.paid_fee
+      }
+      else { console.log(response) }
+    })
+  }
+  catch (error) {
+    console.log(error)
+  }
+  finally {
+    loading.value = false
+  }
+}
+
+const submitForm = async () => {
+  try {
+    loading.value = true
+    refStudentForm.value?.validate().then((valid: any) => {
+      if (valid.valid) {
+        if(form.id){
+          updateStudent(form.id,{
+            name: form.name,
+            class_id: form.class_id,
+            parent: form.parent,
+            age: form.age,
+            fee_balance: form.fee_balance,
+            paid_fee: form.paid_fee
+
+          }).then(async (data) => {
+            if (data.data.success) {
+              ElNotification({
+                title: "Success",
+                message: data.data.message,
+                type: "success",
+              });
+              await router.replace('/students');
+            } else {
+              Object.values(data.data.errors).forEach((val) =>
+           (val as string[]).forEach((message) => {
+             ElNotification({
+               title: "Error",
+               message: message,
+               type: "error",
+             });
+           })
+       );
+            }
+          }).catch((err) => {
+            ElNotification({
+              title: "Error",
+              message: err.message,
+              type: "error",
+            });
+          }).finally(() => {
+            sub_loading.value = false;
+          });
+
+        }else{
+          addStudent({
+            name: form.name,
+            class_id: form.class_id,
+            parent: form.parent,
+            age: form.age,
+            fee_balance: form.fee_balance,
+            paid_fee: form.paid_fee
+          }).then(async (data) => {
+            if (data.data.success) {
+              ElNotification({
+                title: "Success",
+                message: data.data.message,
+                type: "success",
+              });
+              await router.replace('/students');
+            } else {
+              Object.values(data.data.errors).forEach((val) =>
+                  (val as string[]).forEach((message) => {
+                    ElNotification({
+                      title: "Error",
+                      message: message,
+                      type: "error",
+                    });
+                  })
+              );
+            }
+          }).catch((err) => {
+            ElNotification({
+              title: "Error",
+              message: err.message,
+              type: "error",
+            });
+          }).finally(() => {
+            sub_loading.value = false;
+          });
+
+        }
+      } else {
+        loading.value = false
+        // toast.error('Kindly fill in all required fields')
+      }
+
+    });
+  }catch (error) {
+    loading.value = false
+    console.log(error)
+  }
+}
+
+const requiredRule = ref<Array<(value: string) => boolean | string>>([
+  value => {
+    if (value)
+      return true
+
+    return 'Field is required.'
+  },
+])
+
+</script>
+
+<template>
+  <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
+  <v-row>
+    <v-col cols="12" md="12">
+      <UiParentCard title="Student Form">
+        <VCard>
+          <VCol>
+            <VForm  ref="refStudentForm"  @submit.prevent="submitForm">
+              <VRow>
+                <!-- 👉 User Name -->
+                <VCol
+                    cols="12"
+                    md="6"
+                >
+                  <VTextField
+                      v-model="form.name"
+                      label="Student name"
+                      variant="outlined"
+                      placeholder="Name"
+                      validate-on="submit"
+                      :rules="requiredRule"
+                  />
+                </VCol>           
+
+                <VCol
+                    cols="12"
+                    md="6"
+                >
+                  <vue-tel-input
+                      v-bind="phoneBindingProps"
+                      v-model="form.parent"
+                      @validate="checkMobileNumber($event)"
+                  />
+                </VCol>
+                <VCol
+                    cols="12"
+                    md="6"
+                >
+                <VTextField
+                      v-model="form.class_id"
+                      label="Class"
+                      variant="outlined"
+                      validate-on="submit"
+                      :rules="requiredRule"
+                  />
+                </VCol>
+
+                <VCol
+                    cols="12"
+                    md="6"
+                >
+                  <VTextField
+                      v-model="form.age"
+                      variant="outlined"
+                      type="number"
+                      label="Age"
+                      validate-on="submit"
+                      :rules="requiredRule"
+                  />
+                </VCol>
+
+                <VCol
+                    cols="12"
+                    md="6"
+                >
+                  <VTextField
+                      v-model="form.fee_balance"
+                      label="Fee Balance"
+                      variant="outlined"
+                      validate-on="submit"
+                      :rules="requiredRule"
+                  />
+                </VCol>  
+                <VCol
+                    cols="12"
+                    md="6"
+                >
+                  <VTextField
+                      v-model="form.paid_fee"
+                      label="Paid Fee"
+                      variant="outlined"
+                      validate-on="submit"
+                      :rules="requiredRule"
+                  />
+                </VCol> 
+
+                <VCol
+                    cols="12"
+                    class="d-flex gap-4"
+                >
+                  <VBtn
+                color="primary"
+                      class="me-4"
+                      :loading="sub_loading"
+                      type="submit"
+                  >
+                    Submit
+                  </VBtn>
+
+                  <VBtn
+                      type="reset"
+                      color="info"
+                      variant="tonal"
+                      href="/students"
+                  >
+                    Back
+                  </VBtn>
+                </VCol>
+              </VRow>
+            </VForm>
+          </VCol>
+        </VCard>
+      </UiParentCard>
+    </v-col>
+  </v-row>
+</template>

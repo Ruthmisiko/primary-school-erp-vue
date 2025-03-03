@@ -14,7 +14,7 @@ const searchField = ref('')
 const showFilter = ref(true);
 const dialog = ref(false);
 const students = ref<Student[]>([])
-const page = ref({ title: 'Students' });
+const page = ref({ title: 'Teachers' });
 const pagination = reactive<IPagination>({
   total: 0,
   per_page: 0,
@@ -23,9 +23,9 @@ const pagination = reactive<IPagination>({
 });
 const breadcrumbs = shallowRef([
   {
-    title: 'Students',
+    title: 'Teachers',
     disabled: true,
-    href: '/students'
+    href: '/teachers'
   }
 ]);
 
@@ -168,7 +168,7 @@ const handleClear = () => {
                 <template v-slot:prepend>
                   <PlusOutlined />
                 </template>
-                Add Student
+                Add Teacher
               </VBtn>
             </VCol>
           </VRow>
