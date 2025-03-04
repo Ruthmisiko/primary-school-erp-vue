@@ -5,7 +5,6 @@ import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import {addStudent , updateStudent , getStudent} from "@/api/students";
 import {useRoute, useRouter} from "vue-router";
 import {ElNotification} from "element-plus";
-import { VueTelInput } from 'vue-tel-input'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import type { Student } from '@/interface/students';
 
@@ -53,14 +52,6 @@ const phoneBindingProps = {
     name: 'phone',
   },
 }
-const checkMobileNumber = (event: any) => {
-  if (event.valid)
-    phoneBindingProps.styleClasses = ''
-
-  else
-    phoneBindingProps.styleClasses = 'v-input--error'
-}
-
 onMounted(async () => {
 
   form.id = <string>route.params.uuid
@@ -225,10 +216,12 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                     cols="12"
                     md="6"
                 >
-                  <vue-tel-input
-                      v-bind="phoneBindingProps"
+                <VTextField
                       v-model="form.parent"
-                      @validate="checkMobileNumber($event)"
+                      label="Parent"
+                      variant="outlined"
+                      validate-on="submit"
+                      :rules="requiredRule"
                   />
                 </VCol>
                 <VCol

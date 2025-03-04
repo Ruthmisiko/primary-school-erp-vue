@@ -5,7 +5,6 @@ import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import {createTeacher , updateTeacher , getTeacher} from "@/api/teachers";
 import {useRoute, useRouter} from "vue-router";
 import {ElNotification} from "element-plus";
-import { VueTelInput } from 'vue-tel-input'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import type { Teacher } from '@/interface/teachers';
 
@@ -41,24 +40,6 @@ const form = reactive<Teacher>({
 
 })
 
-const phoneBindingProps = {
-  mode: 'international',
-  styleClasses: 'has-default',
-  defaultCountry: 'KE',
-  onlyCountries: ['KE', 'RW', 'UG', 'TZ', 'ET', 'BW'],
-  inputOptions: {
-    showDialCode: false,
-    placeholder: 'Mobile Number',
-    name: 'phone',
-  },
-}
-const checkMobileNumber = (event: any) => {
-  if (event.valid)
-    phoneBindingProps.styleClasses = ''
-
-  else
-    phoneBindingProps.styleClasses = 'v-input--error'
-}
 
 onMounted(async () => {
 
@@ -174,10 +155,12 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                     cols="12"
                     md="6"
                 >
-                  <vue-tel-input
-                      v-bind="phoneBindingProps"
+                <VTextField
                       v-model="form.contact_number"
-                      @validate="checkMobileNumber($event)"
+                      label="Phone Number"
+                      variant="outlined"
+                      validate-on="submit"
+                      :rules="requiredRule"
                   />
                 </VCol>
                 <VCol
