@@ -1,6 +1,6 @@
 import {
   CircleIcon,
-  DashboardIcon,
+  DashboardIcon
 } from 'vue-tabler-icons';
 
 import {
@@ -24,7 +24,7 @@ export interface menu {
   title?: string;
   icon?: object;
   to?: string;
-  divider?: boolean;
+  divider?: boolean; 
   chip?: string;
   chipColor?: string;
   chipVariant?: string;

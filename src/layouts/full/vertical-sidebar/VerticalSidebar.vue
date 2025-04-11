@@ -28,7 +28,7 @@ const sidebarMenu = shallowRef(sidebarItems);
     <!---Logo part -->
 
     <div class="pa-5">
-      <Logo />
+    
     </div>
     <!-- ---------------------------------------------- -->
     <!---Navigation -->

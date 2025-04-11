@@ -7,6 +7,7 @@ import {useRoute, useRouter} from "vue-router";
 import {ElNotification} from "element-plus";
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import type { Teacher } from '@/interface/teachers';
+import type { Filter } from "@/interface";
 
 
 const sub_loading = ref(false)
