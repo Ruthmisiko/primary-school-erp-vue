@@ -8,4 +8,10 @@ export interface IPagination {
     from?: number;
     to?: number;
   }
+  export interface IFilter {
+    search?: string;
+    status?: string;
+    page?: number;
+    per_page?: number;
+  }
   
