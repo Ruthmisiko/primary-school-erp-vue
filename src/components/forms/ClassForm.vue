@@ -47,7 +47,7 @@ onMounted(async () => {
 
 })
 
-const getTeacherList = async (filter: Filter) => {
+const getTeacherList = async (filter) => {
   try {
     fetchTeachers(filter).then(response => {
       if (response.data.success) {

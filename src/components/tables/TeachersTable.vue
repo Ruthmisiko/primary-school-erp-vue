@@ -10,7 +10,6 @@ import {router} from "@/router";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {removeTeacher} from "@/api/teachers";
 import type {Teacher} from "@/interface/teachers";
-import type {IPagination} from "@/interface/shared";
 import { defineProps} from "vue";
 
 
@@ -28,7 +27,6 @@ const emit = defineEmits(['form:cancel','refresh-teacher']);
 const props = defineProps<{
   loading: boolean
   teachers: Teacher[]
-  pagination: IPagination
 }>()
 
 
@@ -90,25 +88,10 @@ const handleDeleteItem = (teacher: any) => {
       :headers="headers"
       :items="formattedTeachers"
       :loading="props.loading"
-      :items-per-page="pagination.per_page"
       height="500"
       fixed-header
   >
-    <template #bottom>
-      <VRow class="justify-center">
-        <VPagination
-            v-model="pagination.current_page"
-            class="my-4"
-            :length="pagination.total_pages"
-            :total-visible="5"
-            @first="searcher"
-            @last="pagination.current_page = pagination.total_pages"
-            @update:model-value="searcher"
-        />
-      </VRow>
-    </template>
-    
-
+   
     <template #item.action="{ item }">
       <VMenu>
         <template #activator="{ props }">
