@@ -8,13 +8,8 @@ import {useRoute, useRouter} from "vue-router";
 import {ElNotification} from "element-plus";
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import type { Teacher } from '@/interface/teachers';
-<<<<<<< HEAD
 import type { IFilter } from '@/interface/shared';
 import { de } from 'element-plus/es/locale/index.mjs';
-=======
-import type { Filter } from "@/interface";
-
->>>>>>> 85352b2042d8f7af8c50e04a0a6eff2e3d0d132c
 
 const sub_loading = ref(false)
 const isLoading = ref(true);
