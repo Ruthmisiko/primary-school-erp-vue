@@ -18,6 +18,7 @@
     "@mdi/js": "^7.4.47",
     "@tsconfig/node22": "^22.0.0",
     "@typescript-eslint/parser": "^8.19.0",
+    "@vueup/vue-quill": "^1.2.0",
     "ant-design-vue": "^4.2.6",
     "apexcharts": "4.3.0",
     "axios": "1.7.9",

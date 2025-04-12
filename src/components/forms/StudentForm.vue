@@ -4,15 +4,18 @@ import {onMounted, reactive, ref, shallowRef} from 'vue';
 import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import {addStudent , updateStudent , getStudent} from "@/api/students";
 import {useRoute, useRouter} from "vue-router";
+import {fetchClasses} from "@/api/classes";
 import {ElNotification} from "element-plus";
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import type { Student } from '@/interface/students';
+import type { IFilter } from '@/interface/shared';
 
 
 const sub_loading = ref(false)
 const loading = ref(false)
 const route = useRoute()
 const refStudentForm = ref()
+const classes = ref([]);
 const router = useRouter();
 const page = ref({ title: 'Student Form' });
 const breadcrumbs = shallowRef([
@@ -31,7 +34,7 @@ const breadcrumbs = shallowRef([
 const form = reactive<Student>({
   id:'',
   name: '',
-  class_id: 0,
+  class_id: '',
   parent: '',
   age: 0,
   fee_balance: 0,
@@ -58,8 +61,28 @@ onMounted(async () => {
   if(form.id){
     await fetchStudent();
   }
+  const filter = {
+    page: 1,
+    orderBy: 'created_at',
+    sortedBy: 'desc',
+  }
+  loadData(filter);
 
 })
+const loadData = async (filter: IFilter) => {
+
+try {
+  const response = await fetchClasses('filter');
+
+  if (response.data?.data) {
+    classes.value = response.data.data;
+  } else {
+    classes.value = [];
+  }
+} catch (error) {
+  console.error("Error fetching classes:", error);
+}
+};
 
 const fetchStudent = async () => {
   loading.value = true
@@ -228,9 +251,13 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                     cols="12"
                     md="6"
                 >
-                <VTextField
+                <VSelect
                       v-model="form.class_id"
-                      label="Class"
+                      label="class"
+                      :items="classes"
+                      item-title="name"
+                      clearable
+                      item-value="id"
                       variant="outlined"
                       validate-on="submit"
                       :rules="requiredRule"

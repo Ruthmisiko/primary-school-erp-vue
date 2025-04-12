@@ -3,18 +3,34 @@ import {onMounted, reactive, ref, shallowRef} from 'vue';
 
 import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import {createTeacher , updateTeacher , getTeacher} from "@/api/teachers";
+import {fetchClasses} from "@/api/classes";
 import {useRoute, useRouter} from "vue-router";
 import {ElNotification} from "element-plus";
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import type { Teacher } from '@/interface/teachers';
-
+import type { IFilter } from '@/interface/shared';
+import { de } from 'element-plus/es/locale/index.mjs';
 
 const sub_loading = ref(false)
 const isLoading = ref(true);
 const route = useRoute()
 const refForm = ref()
+const classes = ref([]);
 const router = useRouter();
 const page = ref({ title: 'Teacher Form' });
+const gender = ref([
+  {name: 'Male', id:'male'},
+  {name:'Female',id:'female'},
+])
+
+const designation = ref([
+  {name: 'Teacher', id:'teacher'},
+  {name:'Head Teacher',id:'head_teacher'},
+  {name:'Deputy HeadTeacher',id:'deputy_head_teacher'},
+  {name:'Senior Teacher',id:'head_teacher'},
+  {name:'Class Teacher',id:'class_teacher'},
+  {name:'HOD',id:'hod'},
+]);
 const breadcrumbs = shallowRef([
   {
     title: 'Teachers',
@@ -43,34 +59,55 @@ const form = reactive<Teacher>({
 
 onMounted(async () => {
 
-  form.id = <string>route.params.uuid
-  if(form.id){
-    await fetchTeacher();
+form.id = <string>route.params.id
+if(form.id){
+  await fetchTeacher();
+}
+const filter = {
+    page: 1,
+    orderBy: 'created_at',
+    sortedBy: 'desc',
   }
+  loadData(filter);
 
 })
+const loadData = async (filter: IFilter) => {
 
-const fetchTeacher = async () => {
-  if (route.params.id) {
-    try {
-      isLoading.value = true;
-      const response = await getTeacher(route.params.id as string);
-      if (response.data.success) {
-        Object.assign(form, response.data.data); 
-      } else {
-        console.log("Error fetching teachers data:", response);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      isLoading.value = false;
+  try {
+    const response = await fetchClasses('filter');
+
+    if (response.data?.data) {
+      classes.value = response.data.data;
+    } else {
+      classes.value = [];
     }
-  } else {
-    isLoading.value = false;
+  } catch (error) {
+    console.error("Error fetching classes:", error);
   }
 };
 
-
+const fetchTeacher= async () => {
+  isLoading.value = true
+  try {
+    getTeacher(form.id).then(response => {
+      if (response?.data?.success) {
+        form.name=response?.data?.data?.name;
+        form.contact_number=response?.data?.data?.contact_number;
+        form.email=response?.data?.data?.email;
+        form.gender=response?.data?.data?.gender;
+        form.assigned_class=response?.data?.data?.assigned_class;
+        form.designation=response?.data?.data?.designation;
+      }
+      else { console.log(response) }
+    })
+  }
+  catch (error) {
+    console.log(error)
+  }
+  finally {
+    isLoading.value = false
+  }
+}
 const handleErrors = (data: any) => {
   Object.values(data.errors).forEach((val: any) => {
     ElNotification({ title: "Error", message: val[0], type: "error" });
@@ -167,9 +204,13 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                     cols="12"
                     md="6"
                 >
-                <VTextField
+                <VSelect
                       v-model="form.gender"
                       label="gender"
+                      :items="gender"
+                      item-title="name"
+                      clearable
+                      item-value="id"
                       variant="outlined"
                       validate-on="submit"
                       :rules="requiredRule"
@@ -180,11 +221,14 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                     cols="12"
                     md="6"
                 >
-                  <VTextField
+                <VSelect
                       v-model="form.designation"
+                      label="designation"
+                      :items="designation"
+                      item-title="name"
+                      clearable
+                      item-value="id"
                       variant="outlined"
-                      type="designation"
-                      label="Designation"
                       validate-on="submit"
                       :rules="requiredRule"
                   />
@@ -206,14 +250,18 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                     cols="12"
                     md="6"
                 >
-                  <VTextField
+                <VSelect
                       v-model="form.assigned_class"
-                      label="Assigned Class"
+                      label="assigned class"
+                      :items="classes"
+                      item-title="name"
+                      clearable
+                      item-value="id"
                       variant="outlined"
                       validate-on="submit"
                       :rules="requiredRule"
                   />
-                </VCol> 
+                </VCol>
 
                 <VCol
                     cols="12"

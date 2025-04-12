@@ -1,7 +1,7 @@
 export interface Student{
     id: string;
     name: string;
-    class_id: number;
+    class_id: string;
     parent: string;
     age: number;
     fee_balance: number;
