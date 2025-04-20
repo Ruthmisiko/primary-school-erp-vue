@@ -1,173 +1,75 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { ArrowDownLeftCircleIcon, ShoppingCartIcon, CircleArrowDownLeftIcon } from 'vue-tabler-icons';
+import { shallowRef, onMounted,ref } from 'vue';
+import { ArchiveIcon, CopyIcon, DownloadIcon, FileExportIcon } from 'vue-tabler-icons';
+import iconCard from '@/assets/images/icons/icon-card.svg';
+import { fetchData} from "@/api/dashboard";
+import type {IFilter} from "@/interface/shared";
 
-const tab = ref('1');
+const items = shallowRef([
+  { title: 'Import Card', icon: DownloadIcon },
+  { title: 'Copy Data', icon: CopyIcon },
+  { title: 'Export', icon: FileExportIcon },
+  { title: 'Archive File', icon: ArchiveIcon }
+]);
+const dashboard = ref<any>({});
 
-const chartOptions1 = computed(() => {
-  return {
-    chart: {
-      type: 'bar',
-      height: 90,
-      fontFamily: `inherit`,
-      foreColor: '#a1aab2',
-      sparkline: {
-        enabled: true
-      }
-    },
-    dataLabels: {
-      enabled: false
-    },
-    colors: ['#fff'],
-    fill: {
-      type: 'solid',
-      opacity: 1
-    },
-    stroke: {
-      curve: 'smooth',
-      width: 3
-    },
-    yaxis: {
-      min: 0,
-      max: 100
-    },
-    tooltip: {
-      theme: 'light',
-      fixed: {
-        enabled: false
-      },
-      x: {
-        show: false
-      },
-      y: {
-        title: {
-          formatter: () => 'Total Order'
-        }
-      },
-      marker: {
-        show: false
-      }
+
+onMounted(() => {
+  const filter = {
+    page: 1,
+    orderBy: 'created_at',
+    sortedBy: 'desc',
+  }
+  loadData(filter);
+})
+
+const loadData = async (filter: IFilter) => {
+
+  try {
+    const response = await fetchData(filter);
+   
+    if (response.data?.data) {
+      dashboard.value = response.data.data; 
+    } else {
+      dashboard.value = [];
     }
-  };
-});
-
-// chart 1
-const lineChart1 = {
-  series: [
-    {
-      name: 'series1',
-      data: [45, 66, 41, 89, 25, 44, 9, 54]
-    }
-  ]
-};
-
-// chart 2
-const chartOptions2 = computed(() => {
-  return {
-    chart: {
-      type: 'bar',
-      height: 90,
-      fontFamily: `inherit`,
-      foreColor: '#a1aab2',
-      sparkline: {
-        enabled: true
-      }
-    },
-    dataLabels: {
-      enabled: false
-    },
-    colors: ['#fff'],
-    fill: {
-      type: 'solid',
-      opacity: 1
-    },
-    stroke: {
-      curve: 'smooth',
-      width: 3
-    },
-    yaxis: {
-      min: 0,
-      max: 100
-    },
-    tooltip: {
-      theme: 'light',
-      fixed: {
-        enabled: false
-      },
-      x: {
-        show: false
-      },
-      y: {
-        title: {
-          formatter: () => 'Total Order'
-        }
-      },
-      marker: {
-        show: false
-      }
-    }
-  };
-});
-
-// chart 1
-const lineChart2 = {
-  series: [
-    {
-      name: 'series1',
-      data: [35, 44, 9, 54, 45, 66, 41, 69]
-    }
-  ]
+  } catch (error) {
+    console.error("Error fetching customers:", error);
+  } 
 };
 </script>
 
 <template>
-  <v-card elevation="0" class="bg-primary overflow-hidden bubble-shape bubble-primary-shape">
+  <v-card elevation="0" class="bg-primary overflow-hidden bubble-shape bubble-secondary-shape">
     <v-card-text>
-      <div class="d-flex align-start mb-3">
-        <v-btn icon rounded="sm" color="darkprimary" variant="flat">
-          <ShoppingCartIcon stroke-width="1.5" width="20" />
+      <div class="d-flex align-start mb-6">
+        <v-btn icon rounded="sm" color="darksecondary" variant="flat">
+          <img :src="iconCard" width="25" />
         </v-btn>
         <div class="ml-auto z-1">
-          <v-tabs v-model="tab" class="theme-tab" density="compact" align-tabs="end">
-            <v-tab value="1" hide-slider color="transparent">Month</v-tab>
-            <v-tab value="2" hide-slider color="transparent">Year</v-tab>
-          </v-tabs>
+          <v-menu :close-on-content-click="false">
+            <template v-slot:activator="{ props }">
+              <v-btn icon rounded="sm" color="secondary" variant="flat" size="small" v-bind="props">
+                <DotsIcon stroke-width="1.5" width="20" />
+              </v-btn>
+            </template>
+            <v-sheet rounded="md" width="150" class="elevation-10">
+              <v-list density="compact">
+                <v-list-item v-for="(item, index) in items" :key="index" :value="index">
+                  <template v-slot:prepend>
+                    <component :is="item.icon" stroke-width="1.5" size="20" />
+                  </template>
+                  <v-list-item-title class="ml-2">{{ item.title }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-sheet>
+          </v-menu>
         </div>
       </div>
-      <v-tabs-window v-model="tab" class="z-1">
-        <v-tabs-window-item value="1">
-          <v-row>
-            <v-col cols="6">
-              <h2 class="text-h1 font-weight-medium">
-                $108
-                <a href="#">
-                  <CircleArrowDownLeftIcon stroke-width="1.5" width="28" class="text-white" />
-                </a>
-              </h2>
-              <span class="text-subtitle-1 text-medium-emphasis text-white">Total Order</span>
-            </v-col>
-            <v-col cols="6">
-              <apexchart type="line" height="90" :options="chartOptions1" :series="lineChart1.series"> </apexchart>
-            </v-col>
-          </v-row>
-        </v-tabs-window-item>
-        <v-tabs-window-item value="2">
-          <v-row>
-            <v-col cols="6">
-              <h2 class="text-h1 font-weight-medium">
-                $961
-                <a href="#">
-                  <ArrowDownLeftCircleIcon stroke-width="1.5" width="28" class="text-white" />
-                </a>
-              </h2>
-              <span class="text-subtitle-1 text-medium-emphasis text-white">Total Order</span>
-            </v-col>
-            <v-col cols="6">
-              <apexchart type="line" height="90" :options="chartOptions2" :series="lineChart2.series"> </apexchart>
-            </v-col>
-          </v-row>
-        </v-tabs-window-item>
-      </v-tabs-window>
+      <h2 class="text-h1 font-weight-medium">
+        {{ dashboard.total_teachers }}
+      </h2>
+      <span class="text-subtitle-1 text-medium-emphasis text-white">Total Teachers</span>
     </v-card-text>
   </v-card>
 </template>

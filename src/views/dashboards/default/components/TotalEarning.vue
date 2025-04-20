@@ -1,13 +1,42 @@
 <script setup lang="ts">
-import { shallowRef } from 'vue';
+import { shallowRef, onMounted,ref } from 'vue';
 import { ArchiveIcon, CopyIcon, DownloadIcon, FileExportIcon } from 'vue-tabler-icons';
 import iconCard from '@/assets/images/icons/icon-card.svg';
+import { fetchData} from "@/api/dashboard";
+import type {IFilter} from "@/interface/shared";
+
 const items = shallowRef([
   { title: 'Import Card', icon: DownloadIcon },
   { title: 'Copy Data', icon: CopyIcon },
   { title: 'Export', icon: FileExportIcon },
   { title: 'Archive File', icon: ArchiveIcon }
 ]);
+const dashboard = ref<any>({});
+
+
+onMounted(() => {
+  const filter = {
+    page: 1,
+    orderBy: 'created_at',
+    sortedBy: 'desc',
+  }
+  loadData(filter);
+})
+
+const loadData = async (filter: IFilter) => {
+
+  try {
+    const response = await fetchData(filter);
+   
+    if (response.data?.data) {
+      dashboard.value = response.data.data; 
+    } else {
+      dashboard.value = [];
+    }
+  } catch (error) {
+    console.error("Error fetching customers:", error);
+  } 
+};
 </script>
 
 <template>
@@ -38,9 +67,9 @@ const items = shallowRef([
         </div>
       </div>
       <h2 class="text-h1 font-weight-medium">
-        $500.00 <a href="#"><CircleArrowUpRightIcon stroke-width="1.5" width="28" class="text-white" /> </a>
+        {{ dashboard.total_students }}
       </h2>
-      <span class="text-subtitle-1 text-medium-emphasis text-white">Total Earning</span>
+      <span class="text-subtitle-1 text-medium-emphasis text-white">Total Students</span>
     </v-card-text>
   </v-card>
 </template>

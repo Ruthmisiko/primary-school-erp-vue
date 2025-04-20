@@ -35,3 +35,35 @@ export const removeStudent = async (id: string) => {
         .then(response => response)
         .catch(e => e.response)
 }
+
+export const importStudents = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+  
+    return await api
+      .post('import-students', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(response => response)
+      .catch(e => e.response);
+  };
+  
+  export const downloadStudentTemplate = () => {
+    return api
+      .get('download-students-template', {
+        responseType: 'blob',
+      })
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'student_upload_template.xlsx');
+        document.body.appendChild(link);
+        link.click();
+      })
+      .catch((e) => {
+        console.error('Error downloading template:', e);
+      });
+  };

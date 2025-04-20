@@ -83,6 +83,37 @@ const MainRoutes = {
       path: '/edit/teacher/:id',
       component: () => import('@/components/forms/TeacherForm.vue')
     },
+    {
+      name: 'subjects',
+      path: '/subjects',
+      component: () => import('@/views/pages/SubjectsPage.vue')
+    },
+    {
+      name: 'subject form',
+      path: '/subject/form',
+      component: () => import('@/components/forms/SubjectForm.vue')
+    },
+    {
+      name: 'Update Subject form',
+      path: '/edit/subject/:id',
+      component: () => import('@/components/forms/SubjectForm.vue')
+    },
+
+    {
+      name: 'exams',
+      path: '/exams',
+      component: () => import('@/views/pages/ExamsPage.vue')
+    },
+    {
+      name: 'exam form',
+      path: '/exam/form',
+      component: () => import('@/components/forms/ExamForm.vue')
+    },
+    {
+      name: 'Update exam form',
+      path: '/edit/exam/:id',
+      component: () => import('@/components/forms/ExamForm.vue')
+    },
 
     {
       name: 'classes',

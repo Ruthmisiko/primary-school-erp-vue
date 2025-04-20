@@ -7,10 +7,12 @@ import { useRoute } from "vue-router";
 import {router} from "@/router";
 import type {Student} from "@/interface/students";
 import type {IFilter, IPagination} from "@/interface/shared";
+import UploadStudentModal from "@/components/modals/UploadStudentModal.vue";
 
 const route = useRoute();
 const loading = ref(true);
-const searchField = ref('')
+const searchField = ref('');
+const showUploadModal = ref(false);
 const showFilter = ref(true);
 const dialog = ref(false);
 const students = ref<Student[]>([])
@@ -137,6 +139,9 @@ const handleClear = () => {
 
   loadData(filter);
 };
+const handleUploadStudent = () => {
+     showUploadModal.value = true;
+ };
 
 </script>
 
@@ -162,6 +167,16 @@ const handleClear = () => {
             </VCol>
             <VCol class="d-flex justify-end">
               <VBtn
+                @click="handleUploadStudent"
+                color="info"
+                class="mr-4"
+              >
+                <template v-slot:prepend>
+                  <CloudUploadOutlined />
+                </template>
+                Upload Student
+              </VBtn>
+              <VBtn
                   @click="handleCreateItem"
                   color="primary"
               >
@@ -184,6 +199,7 @@ const handleClear = () => {
           />
         </VCardText>
       </VCard>
+      <UploadStudentModal v-if="showUploadModal" @close="showUploadModal = false" />
     </VCol>
   </VRow>
 </template>

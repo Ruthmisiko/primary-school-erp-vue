@@ -87,7 +87,7 @@ const revenues = ref([
     <v-card variant="outlined">
       <v-card-text>
         <div class="d-flex align-center">
-          <h4 class="text-h4 mt-1">Popular Stocks</h4>
+          <h4 class="text-h4 mt-1">Enrollment Statistics</h4>
           <div class="ml-auto">
             <v-menu transition="slide-y-transition">
               <template v-slot:activator="{ props }">
@@ -116,15 +116,15 @@ const revenues = ref([
           <div class="pa-5">
             <div class="d-flex align-start justify-space-between">
               <div>
-                <h6 class="text-secondary text-h5">Bajaj Finery</h6>
-                <span class="text-subtitle-2 text-medium-emphasis font-weight-bold">10% Profit</span>
+                <h6 class="text-secondary text-h5">Students</h6>
+                <span class="text-subtitle-2 text-medium-emphasis font-weight-bold">10% Higher</span>
               </div>
-              <h4 class="text-h4">$1839.00</h4>
+              <h4 class="text-h4">2</h4>
             </div>
           </div>
           <apexchart type="area" height="95" :options="chartOptions1" :series="lineChart1.series"> </apexchart>
         </v-card>
-        <div class="mt-4">
+        <!-- <div class="mt-4">
           <perfect-scrollbar v-bind:style="{ height: '270px' }">
             <v-list lines="two" class="py-0">
               <v-list-item v-for="(revenue, i) in revenues" :key="i" :value="revenue" color="secondary" rounded="sm">
@@ -163,7 +163,7 @@ const revenues = ref([
               </template>
             </v-btn>
           </div>
-        </div>
+        </div> -->
       </v-card-text>
     </v-card>
   </v-card>

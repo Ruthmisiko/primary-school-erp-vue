@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import {ref, shallowRef, onMounted, reactive} from 'vue';
 import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
-import ExamsTable from "@/components/tables/ExamsTable.vue";
-import { fetchExams} from "@/api/exams";
+import SubjectsTable from "@/components/tables/SubjectsTable.vue";
+import { fetchSubjects} from "@/api/subjects";
 import { useRoute } from "vue-router";
 import {router} from "@/router";
-import type {Exam} from "@/interface/exam";
+import type {Subject} from "@/interface/subjects";
 import type {IFilter, IPagination} from "@/interface/shared";
 
 const route = useRoute();
@@ -13,8 +13,8 @@ const loading = ref(true);
 const searchField = ref('')
 const showFilter = ref(true);
 const dialog = ref(false);
-const exams = ref<Exam[]>([])
-const page = ref({ title: 'Exams' });
+const subjects = ref<Subject[]>([])
+const page = ref({ title: 'Subjects' });
 const pagination = reactive<IPagination>({
   total: 0,
   per_page: 0,
@@ -23,9 +23,9 @@ const pagination = reactive<IPagination>({
 });
 const breadcrumbs = shallowRef([
   {
-    title: 'Exams',
+    title: 'Subjects',
     disabled: true,
-    href: '/exams'
+    href: '/subjects'
   }
 ]);
 
@@ -41,18 +41,18 @@ onMounted(() => {
 })
 
 const handleCreateItem = () => {
-  router.replace(route.query.to ? String(route.query.to) : '/exam/form');
+  router.replace(route.query.to ? String(route.query.to) : '/subject/form');
 };
 
 const loadData = async (filter: IFilter) => {
   loading.value = true;
   try {
-    const response = await fetchExams(filter);
+    const response = await fetchSubjects(filter);
    
     if (response.data?.data) {
-      exams.value = response.data.data; 
+      subjects.value = response.data.data; 
     } else {
-      exams.value = [];
+      subjects.value = [];
     }
 
     const data = response.data;
@@ -61,7 +61,7 @@ const loadData = async (filter: IFilter) => {
     pagination.current_page = data.current_page ?? 1;
     pagination.total_pages = pagination.per_page > 0 ? Math.ceil(pagination.total / pagination.per_page) : 0;
   } catch (error) {
-    console.error("Error fetching exams:", error);
+    console.error("Error fetching subjects:", error);
   } finally {
     loading.value = false;
   }
@@ -143,15 +143,15 @@ const handleClear = () => {
                 <template v-slot:prepend>
                   <PlusOutlined />
                 </template>
-                Add Exam
+                Add Subject
               </VBtn>
             </VCol>
           </VRow>
         </VCardItem>
         <VCardText class="pa-0 pb-5">
           <VDivider />
-          <ExamsTable
-            :exams="exams"
+          <SubjectsTable
+            :subjects="subjects"
             :pagination="pagination"
             :dialog="dialog"
             :loading="loading"
