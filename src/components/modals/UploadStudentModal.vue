@@ -27,7 +27,7 @@ const uploadFile = async () => {
   const response = await importStudents(selectedFile.value);
 
   if (response?.status === 200) {
-    message.value = 'Products imported successfully.';
+    message.value = 'Students imported successfully.';
     ElNotification({
       title: 'Success',
       message: message.value,

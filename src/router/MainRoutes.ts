@@ -126,6 +126,22 @@ const MainRoutes = {
       path: '/class/form',
       component: () => import('@/components/forms/ClassForm.vue')
     },
+    {
+      name: 'results',
+      path: '/results',
+      component: () => import('@/views/pages/ResultsPage.vue')
+    },
+    {
+      name: 'result form',
+      path: '/result/form',
+      component: () => import('@/components/forms/ResultForm.vue')
+    },
+     {
+      name: 'Update Result form',
+      path: '/edit/result/:id',
+      component: () => import('@/components/forms/ResultForm.vue')
+    },
+    
   ]
 };
 

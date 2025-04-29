@@ -258,8 +258,7 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                       clearable
                       item-value="id"
                       variant="outlined"
-                      validate-on="submit"
-                      :rules="requiredRule"
+                   
                   />
                 </VCol>
 

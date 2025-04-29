@@ -13,11 +13,11 @@ export interface Student{
 export interface Result{
     class_id: string;
     student_id: string;
-    english: number;
-    kiswahili: number;
-    mathematics: number;
-    cre: number;
-    science: number;
+    subject_id: string;
+    exam_id: string;
+    marks_obtained: number;
+    grade: string;
+    remarks: string;
 
 }
 
