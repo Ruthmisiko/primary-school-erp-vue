@@ -40,7 +40,7 @@ const breadcrumbs = shallowRef([
 const form = reactive<Result>({
   id: '',
   class_id: '',
-  student_id: '',
+  subject_id: '',
   exam_id: '',
   result_items: []
 });
@@ -60,7 +60,7 @@ const phoneBindingProps = {
 
 const addRow = () => {
   form.result_items.push({
-    subject_id: '',
+    student_id: '',
     marks_obtained: 0,
     remarks: ''
   });
@@ -150,7 +150,7 @@ const submitForm = async () => {
     if (valid.valid) {
       const payload = {
         class_id: form.class_id,
-        student_id: form.student_id,
+        subject_id: form.subject_id,
         exam_id: form.exam_id,
         result_items: form.result_items
       };
@@ -259,26 +259,25 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                     cols="12"
                     md="6"
                 >
-                <VSelect
-                      v-model="form.student_id"
-                      label="student"
-                      :items="students"
-                      item-title="name"
-                      clearable
-                      item-value="id"
-                      variant="outlined"
-                      validate-on="submit"
-                      :rules="requiredRule"
-                  />
+                <v-select
+                  v-model="form.subject_id"
+                  :items="subjects"
+                  item-title="name"
+                  item-value="id"
+                  label="Subject"
+                  dense
+                  variant="outlined"
+                  :rules="requiredRule"
+                />
                 </VCol>          
                 <VCol cols="12" class="text-right mb-4">
-                  <VBtn color="primary" @click="addRow">Add Subject Row</VBtn>
+                  <VBtn color="primary" @click="addRow">Add</VBtn>
                 </VCol>
                 <VCol cols="12">
                   <v-table>
                     <thead>
                       <tr>
-                        <th>SUBJECT</th>
+                        <th>STUDENT</th>
                         <th>MARKS</th>
                         <th>REMARKS</th>
                         <th>ACTION</th>
@@ -287,14 +286,16 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                     <tbody>
                       <tr v-for="(result, index) in form.result_items" :key="index">
                         <td>
-                          <v-select
-                            v-model="result.subject_id"
-                            :items="subjects"
+                          
+                          <VSelect
+                            v-model="result.student_id"
+                            label="student"
+                            :items="students"
                             item-title="name"
+                            clearable
                             item-value="id"
-                            label="Subject"
-                            dense
                             variant="outlined"
+                            validate-on="submit"
                             :rules="requiredRule"
                           />
                         </td>
@@ -319,7 +320,7 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                         </td>
                         <td>
                           <v-btn icon color="primary" @click="removeRow(index)">
-                            <v-icon>mdi-delete</v-icon>
+                            -
                           </v-btn>
                         </td>
                       </tr>

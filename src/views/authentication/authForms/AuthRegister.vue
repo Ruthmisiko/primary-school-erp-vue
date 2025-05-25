@@ -1,21 +1,70 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import Google from '@/assets/images/auth/social-google.svg';
+import { createUser } from '@/api/auth';
+import { ElNotification } from 'element-plus';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
 const checkbox = ref(false);
 const show1 = ref(false);
 const password = ref('');
+const password_confirmation = ref('');
 const email = ref('');
 const Regform = ref();
-const firstname = ref('');
-const lastname = ref('');
+const username = ref('');
+const name = ref('');
+const phone_number = ref('');
+const loading = ref(false);
 const passwordRules = ref([
   (v: string) => !!v || 'Password is required',
   (v: string) => (v && v.length <= 10) || 'Password must be less than 10 characters'
 ]);
 const emailRules = ref([(v: string) => !!v || 'E-mail is required', (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid']);
 
-function validate() {
-  Regform.value.validate();
+const handleErrors = (data: any) => {
+  if (data?.data?.errors) {
+    Object.values(data.data.errors).forEach((val: any) => {
+      ElNotification({ title: "Error", message: val[0], type: "error" });
+    });
+  } else {
+    ElNotification({ title: "Error", message: data?.data?.message || "Something went wrong", type: "error" });
+  }
+};
+
+async function validate() {
+  const isValid = await Regform.value?.validate();
+  if (isValid) {
+    loading.value = true;
+
+    const payload = {
+      name: name.value,
+      username: username.value,
+      email: email.value,
+      phone_number: phone_number.value,
+      password: password.value,
+      password_confirmation: password.value
+    };
+
+    try {
+      const response = await createUser(payload);
+     if (response.data?.token && response.data?.user) {
+        ElNotification({
+          title: "Success",
+          message: response.data.message || "Registration successful",
+          type: "success"
+        });
+        router.push('/dashboard/default'); // redirect after success
+      } else {
+        handleErrors(response);
+      }
+    } catch (error) {
+      handleErrors(error);
+    } finally {
+      loading.value = false;
+    }
+  }
 }
 </script>
 
@@ -36,22 +85,22 @@ function validate() {
     <v-row>
       <v-col cols="12" sm="6">
         <v-text-field
-          v-model="firstname"
+          v-model="name"
           density="comfortable"
           hide-details="auto"
           variant="outlined"
           color="primary"
-          label="Firstname"
+          label="name"
         ></v-text-field>
       </v-col>
       <v-col cols="12" sm="6">
         <v-text-field
-          v-model="lastname"
+          v-model="username"
           density="comfortable"
           hide-details="auto"
           variant="outlined"
           color="primary"
-          label="Lastname"
+          label="Username"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -67,7 +116,31 @@ function validate() {
       color="primary"
     ></v-text-field>
     <v-text-field
+      v-model="phone_number"
+      label="Phone Number"
+      class="mt-4 mb-4"
+      required
+      density="comfortable"
+      hide-details="auto"
+      variant="outlined"
+      color="primary"
+    ></v-text-field>
+    <v-text-field
       v-model="password"
+      :rules="passwordRules"
+      label="Password"
+      required
+      density="comfortable"
+      variant="outlined"
+      color="primary"
+      hide-details="auto"
+      :append-icon="show1 ? '$eye' : '$eyeOff'"
+      :type="show1 ? 'text' : 'password'"
+      @click:append="show1 = !show1"
+      class="pwdInput"
+    ></v-text-field>
+     <v-text-field
+      v-model="password_confirmation"
       :rules="passwordRules"
       label="Password"
       required

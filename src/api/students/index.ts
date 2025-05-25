@@ -36,6 +36,7 @@ export const removeStudent = async (id: string) => {
         .catch(e => e.response)
 }
 
+
 export const importStudents = async (file: File) => {
     const formData = new FormData();
     formData.append('file', file);
@@ -67,3 +68,13 @@ export const importStudents = async (file: File) => {
         console.error('Error downloading template:', e);
       });
   };
+
+  export const printResult = async (studentId: string) => {
+    return await api
+      .get(`students/${studentId}/print-result`, {
+        responseType: 'blob', // Important: ensures we get a file (e.g., PDF)
+      })
+      .then(response => response)
+      .catch(e => e.response);
+  };
+  

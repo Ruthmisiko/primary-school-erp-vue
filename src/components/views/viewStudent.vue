@@ -35,13 +35,8 @@ onMounted(async () => {
 
 const headers = reactive([
   { title: '#', key: 'index' },
-  { title: 'CLASS', key: 'class_id' },
-  { title: 'KISWAHILI', key: 'kiswahili' },
-  { title: 'ENGLISH', key: 'english' },
-  { title: 'MATHEMATICS', key: 'mathematics' },
-  { title: 'CRE', key: 'cre' },
-  { title: 'SCIENCE', key: 'science' },
-  { title: 'TOTAL MARKS', key: 'marks' },
+  { title: 'SUBJECTS', key: 'subject_id' },
+  { title: 'TOTAL MARKS', key: 'marks_obtained' },
   { title: 'GRADE', key: 'grade' },
 
 
@@ -105,13 +100,9 @@ const formattedResults = computed(() => {
   return student.value.results.map((result: any, index: number) => ({
     
     index: index + 1,
-    class_id: result?.sclass?.name || student.value.sclass?.name || "N/A",
-    english: result.english ?? "N/A",
-    mathematics: result.mathematics ?? "N/A",
-    cre: result.cre ?? "N/A",
-    science: result.science ?? "N/A",
-    kiswahili: result.kiswahili ?? "N/A",
-    marks: (Number(result.english) || 0) + (Number(result.mathematics) || 0) + (Number(result.cre) || 0) + (Number(result.science) || 0) + (Number(result.kiswahili) || 0),
+    subject_id: result?.subject?.name || student.value.sclass?.name || "N/A",
+    marks_obtained: result.marks_obtained,
+    grade: result.marks_obtained,
   }));
 });
 

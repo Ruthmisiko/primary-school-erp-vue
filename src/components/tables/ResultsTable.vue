@@ -17,6 +17,9 @@ const headers = reactive([
   { title: '#', key: 'index' },
   { title: 'EXAM', key: 'exam_id' },
   { title: 'CLASS', key: 'class_id' },
+  { title: 'STUDENT', key: 'student_id' },
+  { title: 'SUBJECT', key: 'subject_id' },
+  { title: 'MARKS', key: 'marks_obtained' },
   { title: 'ACTION', key: 'action' },
 
 ]);
@@ -38,6 +41,9 @@ const formattedResults = computed(() => {
     index: index + 1,
     class_id: result?.sclass?.name,
     exam_id: result?.exam?.name,
+    student_id: result?.student?.name,
+    subject_id: result?.subject?.name,
+    marks_obtained: result.marks_obtained,
   }));
 });
 

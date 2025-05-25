@@ -141,6 +141,12 @@ const MainRoutes = {
       path: '/edit/result/:id',
       component: () => import('@/components/forms/ResultForm.vue')
     },
+
+    {
+      name: 'profile',
+      path: '/profile',
+      component: () => import('@/views/pages/SettingsPage.vue')
+    },
     
   ]
 };

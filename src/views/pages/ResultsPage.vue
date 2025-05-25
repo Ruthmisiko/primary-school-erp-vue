@@ -7,11 +7,14 @@ import { useRoute } from "vue-router";
 import {router} from "@/router";
 import type {Result} from "@/interface/result";
 import type {IFilter, IPagination} from "@/interface/shared";
+import UploadResultModal from "@/components/modals/UploadResultModal.vue";
+
 
 const route = useRoute();
 const loading = ref(true);
 const searchField = ref('')
 const showFilter = ref(true);
+const showUploadModal = ref(false);
 const dialog = ref(false);
 const results = ref<Result[]>([])
 const page = ref({ title: 'Results' });
@@ -113,6 +116,10 @@ const handleClear = () => {
   loadData(filter);
 };
 
+const handleUploadResult = () => {
+     showUploadModal.value = true;
+ };
+
 </script>
 
 <template>
@@ -137,6 +144,16 @@ const handleClear = () => {
             </VCol>
             <VCol class="d-flex justify-end">
               <VBtn
+                  @click="handleUploadResult"
+                  color="info"
+                  class="mr-4"
+              >
+                <template v-slot:prepend>
+                  <PlusOutlined />
+                </template>
+                Upload Results
+              </VBtn>
+              <VBtn
                   @click="handleCreateItem"
                   color="primary"
               >
@@ -145,6 +162,7 @@ const handleClear = () => {
                 </template>
                 Add Result
               </VBtn>
+              
             </VCol>
           </VRow>
         </VCardItem>
@@ -159,6 +177,7 @@ const handleClear = () => {
           />
         </VCardText>
       </VCard>
+      <UploadResultModal v-if="showUploadModal" @close="showUploadModal = false" />
     </VCol>
   </VRow>
 </template>

@@ -8,7 +8,7 @@ import {
   DeleteOutlined
 } from '@ant-design/icons-vue';
 import {ElMessage, ElMessageBox} from "element-plus";
-import {removeStudent} from "@/api/students";
+import {removeStudent, printResult} from "@/api/students";
 import type {Student} from "@/interface/students";
 import { defineProps} from "vue";
 
@@ -82,6 +82,29 @@ const handleDeleteItem = (student: any) => {
       })
 };
 
+const handlePrintItem = async (studentId: string) => {
+  try {
+    const response = await printResult(studentId);
+
+    if (response && response.status === 200) {
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `student-result-${studentId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } else {
+      ElMessage.error("Failed to download result. Please try again.");
+    }
+  } catch (error) {
+    console.error(error);
+    ElMessage.error("An error occurred while printing the result.");
+  }
+};
+
 </script>
 
 <template>
@@ -106,6 +129,9 @@ const handleDeleteItem = (student: any) => {
           </VListItem>
           <VListItem @click="handleEditItem(item.id)">
             <EditOutlined /> <span>EDIT</span>
+          </VListItem>
+          <VListItem @click="handlePrintItem(item.id)">
+            <EditOutlined /> <span>PRINT RESULT</span>
           </VListItem>
           <VListItem @click="handleDeleteItem(item)">
             <DeleteOutlined /> <span>DELETE</span>

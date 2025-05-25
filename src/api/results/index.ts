@@ -36,4 +36,35 @@ export const removeResult = async (id: string) => {
         .catch(e => e.response)
 }
 
+export const importResults = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+  
+    return await api
+      .post('import-results', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(response => response)
+      .catch(e => e.response);
+  };
+  
+  export const downloadResultTemplate = () => {
+    return api
+      .get('download-results-template', {
+        responseType: 'blob',
+      })
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'results_upload_template.xlsx');
+        document.body.appendChild(link);
+        link.click();
+      })
+      .catch((e) => {
+        console.error('Error downloading template:', e);
+      });
+  };
  
