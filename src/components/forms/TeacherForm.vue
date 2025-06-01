@@ -19,8 +19,8 @@ const classes = ref([]);
 const router = useRouter();
 const page = ref({ title: 'Teacher Form' });
 const gender = ref([
-  {name: 'Male', id:'male'},
-  {name:'Female',id:'female'},
+  {name: 'Male', id:'Male'},
+  {name:'Female',id:'Female'},
 ])
 
 const designation = ref([

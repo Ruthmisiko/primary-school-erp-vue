@@ -2,11 +2,11 @@
 import {onMounted, reactive, ref, shallowRef} from 'vue';
 
 import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
-import { updateSettings , getUsers} from "@/api/users";
+import { updateSettings , getSettings} from "@/api/business";
 import {useRoute, useRouter} from "vue-router";
 import {ElNotification} from "element-plus";
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import type { User } from '@/interface/users';
+import type { Business } from '@/interface/business';
 
 
 const sub_loading = ref(false)
@@ -17,12 +17,11 @@ const router = useRouter();
 const page = ref({ title: 'Settings' });
 
 
-const form = reactive<User>({
+const form = reactive<Business>({
   id:'',
-  name: '',
-  email: '',
-  phone_number: '',
-  userType: ''
+  business_name: '',
+  business_email: '',
+  business_phone: '',
 })
 
 
@@ -30,16 +29,16 @@ onMounted(async () => {
 
   form.id = <string>route.params.uuid
   if(form.id){
-    await fetchUsers();
+    await fetchBusiness();
   }
 })
 
 
-const fetchUsers = async () => {
+const fetchBusiness = async () => {
   if (route.params.id) {
     try {
       isLoading.value = true;
-      const response = await getUsers(route.params.id as string);
+      const response = await getSettings(route.params.id as string);
       if (response.data.success) {
         Object.assign(form, response.data.data); 
       } else {
@@ -108,7 +107,7 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                     md="6"
                 >
                   <VTextField
-                      v-model="form.name"
+                      v-model="form.business_name"
                       label="Business name"
                       variant="outlined"
                       placeholder="Name"
@@ -121,7 +120,7 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                     md="6"
                 >
                   <VTextField
-                      v-model="form.email"
+                      v-model="form.business_email"
                       label="Business Email Address"
                       variant="outlined"
                       placeholder="Name"
@@ -135,7 +134,7 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                     md="6"
                 >
                   <VTextField
-                      v-model="form.phone_number"
+                      v-model="form.business_phone"
                       label="Business Phone No"
                       variant="outlined"
                       placeholder="Name"
