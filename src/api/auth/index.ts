@@ -8,7 +8,7 @@ export const createUser = async (postBody: any) => {
 }
 
 // @/api/auth.ts
-export const loginUser = async (credentials: { email: string, password: string }) => {
+export const login = async (credentials: { email: string, password: string }) => {
     return await api
         .post('auth/login', credentials)
         .then(response => response)
