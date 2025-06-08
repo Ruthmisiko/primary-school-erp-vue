@@ -40,7 +40,7 @@ const sidebarItem: menu[] = [
   {
     title: 'Default',
     icon: DashboardIcon,
-    to: '/dashboard/default'
+    to: '/dashboard'
   },
 
   { header: 'Students Management' },
@@ -84,6 +84,19 @@ const sidebarItem: menu[] = [
     title: 'Results',
     icon: SolutionOutlined,
     to: '/results'
+  },
+  
+  { divider: true },
+  { header: 'User Management' },
+  {
+    title: 'user',
+    icon:   UserSwitchOutlined,
+    to: '/users'
+  },
+  {
+    title: 'Roles',
+    icon:   UserSwitchOutlined,
+    to: '/roles'
   },
   { divider: true },
   { header: 'User Profile' },

@@ -1,21 +1,22 @@
 <script setup lang="ts">
 import {ref, shallowRef, onMounted, reactive} from 'vue';
 import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
-import TeachersTable from "@/components/tables/TeachersTable.vue";
-import { fetchTeachers} from "@/api/teachers";
+import UsersTable from "@/components/tables/UsersTable.vue";
+import { fetchUsers} from "@/api/users";
 import { useRoute } from "vue-router";
 import {router} from "@/router";
-import type {Teacher} from "@/interface/teachers";
+import type {User} from "@/interface/users";
 import type {IFilter, IPagination} from "@/interface/shared";
-import { exportTeachers } from "@/api/teachers";
+import UploadStudentModal from "@/components/modals/UploadStudentModal.vue";
 
 const route = useRoute();
 const loading = ref(true);
-const searchField = ref('')
+const searchField = ref('');
+const showUploadModal = ref(false);
 const showFilter = ref(true);
 const dialog = ref(false);
-const teachers = ref<Teacher[]>([])
-const page = ref({ title: 'Teachers' });
+const users = ref<User[]>([])
+const page = ref({ title: 'Users' });
 const pagination = reactive<IPagination>({
   total: 0,
   per_page: 0,
@@ -24,9 +25,9 @@ const pagination = reactive<IPagination>({
 });
 const breadcrumbs = shallowRef([
   {
-    title: 'Teachers',
+    title: 'Users',
     disabled: true,
-    href: '/teachers'
+    href: '/users'
   }
 ]);
 
@@ -42,18 +43,43 @@ onMounted(() => {
 })
 
 const handleCreateItem = () => {
-  router.replace(route.query.to ? String(route.query.to) : '/teacher/form');
+  router.replace(route.query.to ? String(route.query.to) : '/user/form');
 };
+const loadDataa = async (filter: IFilter) => {
+  loading.value = true
 
+  try {
+    const response = await fetchUsers(filter) 
+    const data = response.data?.data
+    students.value = response.data?.data;
+    if (data.per_page && data.total && data.current_page) {
+      pagination.per_page = data.per_page ?? 0;
+      pagination.total = data.total ?? 0;
+      pagination.current_page = data.current_page;
+
+      pagination.total_pages = (pagination.per_page > 0 && pagination.total > 0)
+          ? Math.ceil(pagination.total / pagination.per_page)
+          : 0;
+    } else {
+      pagination.total_pages = 0;
+    }
+  }
+  catch (error) {
+    console.log(error)
+  }
+  finally {
+    loading.value = false
+  }
+}
 const loadData = async (filter: IFilter) => {
   loading.value = true;
   try {
-    const response = await fetchTeachers(filter);
+    const response = await fetchUsers(filter);
    
     if (response.data?.data) {
-      teachers.value = response.data.data; 
+      users.value = response.data.data; 
     } else {
-      teachers.value = [];
+      users.value = [];
     }
 
     const data = response.data;
@@ -62,7 +88,7 @@ const loadData = async (filter: IFilter) => {
     pagination.current_page = data.current_page ?? 1;
     pagination.total_pages = pagination.per_page > 0 ? Math.ceil(pagination.total / pagination.per_page) : 0;
   } catch (error) {
-    console.error("Error fetching teachers:", error);
+    console.error("Error fetching customers:", error);
   } finally {
     loading.value = false;
   }
@@ -113,27 +139,9 @@ const handleClear = () => {
 
   loadData(filter);
 };
-
-const handleExportPdf = async () => {
-  try {
-    const response = await exportTeachers();
-    
-    if (response.status === 200) {
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'teachers-report.pdf');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } else {
-      console.error('Failed to export PDF:', response);
-    }
-  } catch (error) {
-    console.error('Error exporting PDF:', error);
-  } 
-};
+const handleUploadStudent = () => {
+     showUploadModal.value = true;
+ };
 
 </script>
 
@@ -158,16 +166,7 @@ const handleExportPdf = async () => {
               />
             </VCol>
             <VCol class="d-flex justify-end">
-              <VBtn
-              @click="handleExportPdf"
-                color="secondary"
-                class="mr-4"
-              >
-                <template v-slot:prepend>
-                  <CloudUploadOutlined />
-                </template>
-                Download
-              </VBtn>
+              
               <VBtn
                   @click="handleCreateItem"
                   color="primary"
@@ -175,15 +174,15 @@ const handleExportPdf = async () => {
                 <template v-slot:prepend>
                   <PlusOutlined />
                 </template>
-                Add Teacher
+                Add User
               </VBtn>
             </VCol>
           </VRow>
         </VCardItem>
         <VCardText class="pa-0 pb-5">
           <VDivider />
-          <TeachersTable
-            :teachers="teachers"
+          <UsersTable   
+            :users="users"
             :pagination="pagination"
             :dialog="dialog"
             :loading="loading"
@@ -191,6 +190,7 @@ const handleExportPdf = async () => {
           />
         </VCardText>
       </VCard>
+      <UploadStudentModal v-if="showUploadModal" @close="showUploadModal = false" />
     </VCol>
   </VRow>
 </template>

@@ -1,19 +1,47 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { shallowRef, onMounted,ref } from 'vue';
+import { ArchiveIcon, CopyIcon, DownloadIcon, FileExportIcon } from 'vue-tabler-icons';
+import iconCard from '@/assets/images/icons/icon-card.svg';
+import { fetchData} from "@/api/dashboard";
+import type {IFilter} from "@/interface/shared";
+
+
+const dashboard = ref<any>({});
+
+
+onMounted(() => {
+  const filter = {
+    page: 1,
+    orderBy: 'created_at',
+    sortedBy: 'desc',
+  }
+  loadData(filter);
+})
+
+const loadData = async (filter: IFilter) => {
+
+  try {
+    const response = await fetchData(filter);
+   
+    if (response.data?.data) {
+      dashboard.value = response.data.data; 
+    } else {
+      dashboard.value = [];
+    }
+  } catch (error) {
+    console.error("Error fetching customers:", error);
+  } 
+};
+</script>
 
 <template>
-  <v-card elevation="0" class="bg-primary overflow-hidden bubble-shape-sm bubble-primary mb-6">
-    <v-card-text class="pa-5">
-      <div class="d-flex align-center ga-4">
-        <v-btn color="darkprimary" icon rounded="sm" variant="flat">
-          <TableIcon stroke-width="1.5" width="25" />
-        </v-btn>
-        <div>
-          <h4 class="text-h4 font-weight-medium">90,000</h4>
-          <span class="text-subtitle-2 text-medium-emphasis text-white">Total Payments</span>
-        </div>
-      </div>
+  <v-card elevation="0" class="bg-secondary overflow-hidden bubble-shape bubble-secondary-shape">
+    <v-card-text>
+     
+      <h2 class="text-h1 font-weight-medium">
+        {{ dashboard.total_users }}
+      </h2>
+      <span class="text-subtitle-1 text-medium-emphasis text-white">Total Users</span>
     </v-card-text>
   </v-card>
-
-  
 </template>

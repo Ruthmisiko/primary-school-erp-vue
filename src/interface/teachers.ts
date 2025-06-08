@@ -5,6 +5,6 @@ export interface Teacher{
     contact_number: string;
     designation: string;
     email: string;
-    subjects_taught: string;
     assigned_class: string;
+    subjects: string[];
 }

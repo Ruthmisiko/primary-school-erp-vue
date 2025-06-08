@@ -8,6 +8,8 @@ import {router} from "@/router";
 import type {Student} from "@/interface/students";
 import type {IFilter, IPagination} from "@/interface/shared";
 import UploadStudentModal from "@/components/modals/UploadStudentModal.vue";
+import { exportStudents } from "@/api/students";
+
 
 const route = useRoute();
 const loading = ref(true);
@@ -143,6 +145,26 @@ const handleUploadStudent = () => {
      showUploadModal.value = true;
  };
 
+ const handleExportPdf = async () => {
+  try {
+    const response = await exportStudents();
+    
+    if (response.status === 200) {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'students-report.pdf');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } else {
+      console.error('Failed to export PDF:', response);
+    }
+  } catch (error) {
+    console.error('Error exporting PDF:', error);
+  } 
+};
 </script>
 
 <template>
@@ -167,6 +189,16 @@ const handleUploadStudent = () => {
             </VCol>
             <VCol class="d-flex justify-end">
               <VBtn
+                @click="handleExportPdf"
+                color="secondary"
+                class="mr-4"
+              >
+                <template v-slot:prepend>
+                  <CloudUploadOutlined />
+                </template>
+                Download
+              </VBtn>
+              <VBtn
                 @click="handleUploadStudent"
                 color="info"
                 class="mr-4"
@@ -174,7 +206,7 @@ const handleUploadStudent = () => {
                 <template v-slot:prepend>
                   <CloudUploadOutlined />
                 </template>
-                Upload Student
+                Upload
               </VBtn>
               <VBtn
                   @click="handleCreateItem"

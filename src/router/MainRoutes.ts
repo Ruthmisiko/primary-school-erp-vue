@@ -84,6 +84,11 @@ const MainRoutes = {
       component: () => import('@/components/forms/TeacherForm.vue')
     },
     {
+      name: 'view teacher',
+      path: '/view/teacher/:id',
+      component: () => import('@/components/views/viewTeacher.vue')
+    },
+    {
       name: 'subjects',
       path: '/subjects',
       component: () => import('@/views/pages/SubjectsPage.vue')
@@ -127,6 +132,11 @@ const MainRoutes = {
       component: () => import('@/components/forms/ClassForm.vue')
     },
     {
+      name: 'view class',
+      path: '/view/class/:id',
+      component: () => import('@/components/views/viewClass.vue')
+    },
+    {
       name: 'results',
       path: '/results',
       component: () => import('@/views/pages/ResultsPage.vue')
@@ -146,6 +156,27 @@ const MainRoutes = {
       name: 'profile',
       path: '/profile',
       component: () => import('@/views/pages/SettingsPage.vue')
+    },
+    {
+      name: 'users',
+      path: '/users',
+      component: () => import('@/views/pages/UsersPage.vue')
+    },
+
+    {
+      name: 'user form',
+      path: '/user/form',
+      component: () => import('@/components/forms/UserForm.vue')
+    },
+     {
+      name: 'Update User form',
+      path: '/edit/user/:id',
+      component: () => import('@/components/forms/UserForm.vue')
+    },
+    {
+      name: 'view user',
+      path: '/view/user/:id',
+      component: () => import('@/components/views/viewStudent.vue')
     },
     
   ]
