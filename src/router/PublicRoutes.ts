@@ -25,6 +25,12 @@ const PublicRoutes = {
       name: 'Error 404',
       path: '/error',
       component: () => import('@/views/pages/maintenance/error/Error404Page.vue')
+    },
+    {
+      name: 'Dashboard',
+      path: '/dashboard',
+      component: () => import('@/views/dashboards/default/DefaultDashboard.vue'),
+      meta: { requiresAuth: false } // Allow public access or set to true if authenticated
     }
   ]
 };

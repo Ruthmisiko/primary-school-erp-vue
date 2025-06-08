@@ -1,30 +1,94 @@
+
 <script setup lang="ts">
 import { ref } from 'vue';
 import Google from '@/assets/images/auth/social-google.svg';
-import { useAuthStore } from '@/stores/auth';
-import { Form } from 'vee-validate';
+import { ElNotification } from 'element-plus';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores';
+import { useAuthStore } from '@/stores/auth'; // Sync with guard
+import { api } from '@/api';
+
+const router = useRouter();
+const userStore = useUserStore();
+const authStore = useAuthStore();
 
 const checkbox = ref(false);
-const valid = ref(false);
 const show1 = ref(false);
-const router = useRouter();
-const password = ref('admin123');
-const username = ref('info@codedthemes.com');
+const username = ref('');
+const password = ref('');
+const loading = ref(false);
+const loginForm = ref();
+
 const passwordRules = ref([
   (v: string) => !!v || 'Password is required',
-  (v: string) => (v && v.length <= 10) || 'Password must be less than 10 characters'
+  (v: string) => (v && v.length <= 10) || 'Password must be less than 10 characters',
 ]);
-const emailRules = ref([(v: string) => !!v || 'E-mail is required', (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid']);
+const emailRules = ref([
+  (v: string) => !!v || 'E-mail is required',
+  (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+]);
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-async function validate(values: any, { setErrors }: any) {
-  const authStore = useAuthStore();
-  try {
-    await authStore.login(username.value, password.value);
-    router.push('/dashboard'); // Redirect to dashboard after successful login
-  } catch (error) {
-    setErrors({ apiError: error });
+async function validate() {
+  const isValid = await loginForm.value?.validate();
+  if (isValid) {
+    loading.value = true;
+    try {
+      const response = await api.post('/auth/login', {
+        email: username.value,
+        password: password.value,
+      });
+      const astonish = response.data.message;
+      console.log('Response message:', astonish, 'Full response:', response.data);
+      if (astonish === 'Login successful') {
+        try {
+          if (typeof userStore.setToken === 'function') {
+            userStore.setToken(response.data.token);
+            userStore.setUsername(response.data.user.username);
+            userStore.setUser(response.data.user);
+            // Sync with authStore for guard
+            authStore.user = response.data.user; // Match User interface
+            localStorage.setItem('user', JSON.stringify(response.data.user)); // Mimic authStore behavior
+            console.log('Token stored in userStore:', userStore.getAccessToken);
+            console.log('User stored in authStore:', authStore.user);
+          } else {
+            console.error('setToken is not a function');
+            throw new Error('User store is not properly configured');
+          }
+          await router.push('/dashboard').catch((error) => {
+            console.error('Navigation error:', error);
+            ElNotification({
+              title: 'Error',
+              message: 'Failed to redirect to dashboard: ' + error.message,
+              type: 'error',
+            });
+            throw error;
+          });
+          console.log('Redirected to /dashboard');
+        } catch (error) {
+          console.error('Router or store error:', error);
+          ElNotification({
+            title: 'Error',
+            message: 'Failed to store data or redirect to dashboard',
+            type: 'error',
+          });
+        }
+      } else {
+        ElNotification({
+          title: 'Error',
+          message: astonish || 'Something went wrong',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      ElNotification({
+        title: 'Error',
+        message: error.response?.data?.message || 'An unexpected error occurred',
+        type: 'error',
+      });
+    } finally {
+      loading.value = false;
+    }
   }
 }
 </script>
@@ -32,8 +96,8 @@ async function validate(values: any, { setErrors }: any) {
 <template>
   <v-btn block color="primary" variant="outlined" class="text-lightText googleBtn">
     <img :src="Google" alt="google" />
-    <span class="ml-2">Sign in with Google</span></v-btn
-  >
+    <span class="ml-2">Sign in with Google</span>
+  </v-btn>
   <v-row>
     <v-col class="d-flex align-center">
       <v-divider class="custom-devider" />
@@ -42,12 +106,12 @@ async function validate(values: any, { setErrors }: any) {
     </v-col>
   </v-row>
   <h5 class="text-h5 text-center my-4 mb-8">Sign in with Email address</h5>
-  <Form @submit="validate" class="mt-7 loginForm" v-slot="{ errors, isSubmitting }">
+  <v-form ref="loginForm" lazy-validation class="mt-7 loginForm">
     <v-text-field
       v-model="username"
       :rules="emailRules"
-      label="Email Address / Username"
-      class="mt-4 mb-8"
+      label="Email Address"
+      class="mt-4 mb-4"
       required
       density="comfortable"
       hide-details="auto"
@@ -68,7 +132,6 @@ async function validate(values: any, { setErrors }: any) {
       @click:append="show1 = !show1"
       class="pwdInput"
     ></v-text-field>
-
     <div class="d-sm-flex align-center mt-2 mb-7 mb-sm-0">
       <v-checkbox
         v-model="checkbox"
@@ -83,18 +146,24 @@ async function validate(values: any, { setErrors }: any) {
         <a href="javascript:void(0)" class="text-primary text-decoration-none">Forgot password?</a>
       </div>
     </div>
-    <v-btn color="secondary" :loading="isSubmitting" block class="mt-2" variant="flat" size="large" :disabled="valid" type="submit">
-      Sign In</v-btn
+    <v-btn
+      color="secondary"
+      :loading="loading"
+      block
+      class="mt-2"
+      variant="flat"
+      size="large"
+      @click="validate"
     >
-    <div v-if="errors.apiError" class="mt-2">
-      <v-alert color="error">{{ errors.apiError }}</v-alert>
-    </div>
-  </Form>
+      Sign In
+    </v-btn>
+  </v-form>
   <div class="mt-5 text-right">
     <v-divider />
-    <v-btn variant="plain" to="/register" class="mt-2 text-capitalize mr-n2">Don't Have an account?</v-btn>
+    <v-btn variant="plain" to="/register" class="mt-2 text-capitalize mr-n2">Don't have an account?</v-btn>
   </div>
 </template>
+
 <style lang="scss">
 .custom-devider {
   border-color: rgba(0, 0, 0, 0.08) !important;

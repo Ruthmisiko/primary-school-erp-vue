@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 import {useUserStore} from "@/stores"
+import { getActivePinia } from 'pinia';
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_APP_API_ROOT
@@ -10,6 +11,15 @@ const userStore = useUserStore();
 
 api.interceptors.request.use((config) => {
     config.headers.Accept = 'application/json';
+
+    const pinia = getActivePinia();
+  if (pinia) {
+    const userStore = useUserStore();
+    const token = userStore.getAccessToken;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
 
     const token = userStore.getAccessToken;
     if (token) config.headers.Authorization = `Bearer ${token}`;
