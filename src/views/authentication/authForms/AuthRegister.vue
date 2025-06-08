@@ -55,7 +55,7 @@ async function validate() {
           message: response.data.message || "Registration successful",
           type: "success"
         });
-        router.push('/dashboard/default'); // redirect after success
+        router.push('/dashboard'); // redirect after success
       } else {
         handleErrors(response);
       }
@@ -142,7 +142,7 @@ async function validate() {
      <v-text-field
       v-model="password_confirmation"
       :rules="passwordRules"
-      label="Password"
+      label="Confirm Password"
       required
       density="comfortable"
       variant="outlined"
@@ -151,7 +151,7 @@ async function validate() {
       :append-icon="show1 ? '$eye' : '$eyeOff'"
       :type="show1 ? 'text' : 'password'"
       @click:append="show1 = !show1"
-      class="pwdInput"
+      class="pwdInput mt-8"
     ></v-text-field>
 
     <div class="d-sm-inline-flex align-center mt-2 mb-7 mb-sm-0 font-weight-bold">
