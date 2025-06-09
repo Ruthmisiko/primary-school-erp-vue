@@ -81,9 +81,9 @@ function searchbox() {
           <BellIcon stroke-width="1.5" size="22" />
         </v-btn>
       </template>
-      <v-sheet rounded="md" width="330" elevation="12">
+      <!-- <v-sheet rounded="md" width="330" elevation="12">
         <NotificationDD />
-      </v-sheet>
+      </v-sheet> -->
     </v-menu>
 
     <!-- ---------------------------------------------- -->
