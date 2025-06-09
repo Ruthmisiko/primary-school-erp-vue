@@ -49,13 +49,13 @@ async function validate() {
 
     try {
       const response = await createUser(payload);
-     if (response.data?.token && response.data?.user) {
+      if (response.status === 201 && response.data?.message) {
         ElNotification({
           title: "Success",
           message: response.data.message || "Registration successful",
           type: "success"
         });
-        router.push('/dashboard'); // redirect after success
+        router.push('/dashboard');
       } else {
         handleErrors(response);
       }
