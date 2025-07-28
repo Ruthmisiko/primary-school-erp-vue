@@ -289,6 +289,7 @@ const handleViewItem = (id: string) => {
   </VCard>
 </template>
 
+
 <style lang="scss">
 .v-tabs--direction-horizontal {
   .v-tab {
