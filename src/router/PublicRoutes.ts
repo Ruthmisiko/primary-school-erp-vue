@@ -6,6 +6,11 @@ const PublicRoutes = {
   },
   redirect: '/login1',
   children: [
+    // {
+    //   name: 'Landing',
+    //   path: '/',
+    //   component: () => import('@/views/LandingPage.vue')
+    // },
     {
       name: 'Authentication',
       path: '/login',

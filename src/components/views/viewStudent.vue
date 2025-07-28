@@ -116,7 +116,7 @@ const formattedResults = computed(() => {
       <VTabs @update:modelValue="changesInTab" color="primary" v-model="tab">
         <VTab value="personal_details"> Personal Information</VTab>
         <VTab value="results"> Results</VTab>
-        <VTab value="reports"> Reports</VTab>
+        <!-- <VTab value="reports"> Reports</VTab> -->
       </VTabs>
       <VDivider/>
       <VCardText>

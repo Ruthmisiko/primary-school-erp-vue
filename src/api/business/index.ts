@@ -1,21 +1,15 @@
-import { api ,generateUrl } from "@/api"
+import { api } from "@/api";
 
-export const updateSettings = async (id: string, postBody: any) => {
+export const getSettings = async () => {
     return await api
-        .patch(`settings/${id}`, postBody)
+        .get('settings')
         .then(response => response)
-        .catch(e => e.response)
-}
+        .catch(e => e.response);
+};
 
-export const getSettings = async (id: string) => {
+export const updateSettings = async (postBody: any) => {
     return await api
-        .get(`settings/${id}`)
+        .patch('settings', postBody)
         .then(response => response)
-        .catch(e => e.response)
-}
-
-
-
-  
-  
-  
+        .catch(e => e.response);
+};

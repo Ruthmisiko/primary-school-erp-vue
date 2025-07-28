@@ -9,6 +9,7 @@ import {ElNotification} from "element-plus";
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import type { Student } from '@/interface/students';
 import type { IFilter } from '@/interface/shared';
+import { watch } from 'vue';
 
 
 const sub_loading = ref(false)
@@ -18,6 +19,8 @@ const refStudentForm = ref()
 const classes = ref([]);
 const router = useRouter();
 const page = ref({ title: 'Student Form' });
+const selectedClassFee = ref<number | null>(null);
+
 const breadcrumbs = shallowRef([
   {
     title: 'Students',
@@ -106,6 +109,24 @@ const fetchStudent = async () => {
     loading.value = false
   }
 }
+
+watch(
+  () => form.class_id,
+  (newClassId) => {
+    const selected = classes.value.find((cls) => cls.id === newClassId);
+    selectedClassFee.value = selected?.fee ?? null;
+  }
+);
+
+watch(
+  [() => form.paid_fee, selectedClassFee],
+  ([paidFee, classFee]) => {
+    const paid = parseFloat(paidFee || '0');
+    const total = classFee ?? 0;
+    const balance = total - paid;
+    form.fee_balance = balance >= 0 ? balance.toFixed(2) : '0.00';
+  }
+);
 
 const submitForm = async () => {
   try {
@@ -263,6 +284,16 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                       :rules="requiredRule"
                   />
                 </VCol>
+                <VCol cols="12" md="6">
+                <VTextField
+                  :model-value="selectedClassFee !== null ? selectedClassFee : ''"
+                  label="Class Fee"
+                  variant="outlined"
+                  readonly
+                  disabled
+                  placeholder="Select a class"
+                />
+              </VCol>
 
                 <VCol
                     cols="12"
@@ -278,30 +309,25 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                   />
                 </VCol>
 
-                <VCol
-                    cols="12"
-                    md="6"
-                >
+                
+                <VCol cols="12" md="6">
                   <VTextField
-                      v-model="form.fee_balance"
-                      label="Fee Balance"
-                      variant="outlined"
-                      validate-on="submit"
-                      :rules="requiredRule"
+                    v-model="form.paid_fee"
+                    label="Paid Fee"
+                    variant="outlined"
+                    type="number"
+                    min="0"
                   />
-                </VCol>  
-                <VCol
-                    cols="12"
-                    md="6"
-                >
-                  <VTextField
-                      v-model="form.paid_fee"
-                      label="Paid Fee"
-                      variant="outlined"
-                      validate-on="submit"
-                      :rules="requiredRule"
-                  />
-                </VCol> 
+                </VCol>
+                <VCol cols="12" md="6">
+                <VTextField
+                  :model-value="form.fee_balance"
+                  label="Fee Balance"
+                  variant="outlined"
+                  readonly
+                  disabled
+                />
+              </VCol>
 
                 <VCol
                     cols="12"

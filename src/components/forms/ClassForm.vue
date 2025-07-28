@@ -33,7 +33,8 @@ const breadcrumbs = shallowRef([
 const form = reactive<Class>({
   id:'',
   name: '',
-  teacher_id: ''
+  teacher_id: '',
+  fee:0
 })
 
 
@@ -185,7 +186,18 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
               />
                 </VCol>
 
-               
+                <VCol cols="12" md="6">
+                  <VTextField
+                    v-model.number="form.fee"
+                    label="Class Fee"
+                    placeholder="Enter fee amount"
+                    variant="outlined"
+                    validate-on="submit"
+                    :rules="requiredRule"
+                    type="number"
+                    min="0"
+                  />
+                </VCol>
 
                 <VCol
                     cols="12"

@@ -75,11 +75,11 @@ const sidebarItem: menu[] = [
     icon: BarsOutlined,
     to: '/exams'
   },
-  {
-    title: 'Reports',
-    icon: BarsOutlined,
-    to: '/reports'
-  },
+  // {
+  //   title: 'Reports',
+  //   icon: BarsOutlined,
+  //   to: '/reports'
+  // },
   {
     title: 'Results',
     icon: SolutionOutlined,
@@ -93,11 +93,11 @@ const sidebarItem: menu[] = [
     icon:   UserSwitchOutlined,
     to: '/users'
   },
-  {
-    title: 'Roles',
-    icon:   UserSwitchOutlined,
-    to: '/roles'
-  },
+  // {
+  //   title: 'Roles',
+  //   icon:   UserSwitchOutlined,
+  //   to: '/roles'
+  // },
   { divider: true },
   { header: 'User Profile' },
   {

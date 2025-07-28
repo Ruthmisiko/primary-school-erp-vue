@@ -124,15 +124,15 @@ const handlePrintItem = async (studentId: string) => {
           </VBtn>
         </template>
         <VList>
-          <VListItem @click="handleViewItem(item.id)">
+          <!-- <VListItem @click="handleViewItem(item.id)">
             <EyeOutlined /> <span>VIEW</span>
           </VListItem>
           <VListItem @click="handleEditItem(item.id)">
             <EditOutlined /> <span>EDIT</span>
-          </VListItem>
-          <VListItem @click="handlePrintItem(item.id)">
+          </VListItem> -->
+          <!-- <VListItem @click="handlePrintItem(item.id)">
             <EditOutlined /> <span>PRINT RESULT</span>
-          </VListItem>
+          </VListItem> -->
           <VListItem @click="handleDeleteItem(item)">
             <DeleteOutlined /> <span>DELETE</span>
           </VListItem>
