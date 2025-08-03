@@ -137,7 +137,7 @@ const formattedResults = computed(() => {
                   <VCol>
                     <h4>Class </h4>
                     <p>
-                      {{ student?.class_id}}
+                      {{ student?.sclass?.name}}
                     </p>
                   </VCol>
                 </VRow>
