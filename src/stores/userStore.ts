@@ -88,10 +88,9 @@ export const useUserStore = defineStore('user', {
     setToken(token: string) {
       this.token = token;
       const authStore = useAuthStore();
-      // Optionally sync token if authStore needs it
-      if (authStore.user) {
-        localStorage.setItem('user', JSON.stringify({ ...authStore.user, token }));
-      }
+      // Update localStorage with token
+      const userData = authStore.user ? { ...authStore.user, token } : { token };
+      localStorage.setItem('user', JSON.stringify(userData));
     },
     setUsername(username: string) {
       this.username = username;
@@ -100,7 +99,12 @@ export const useUserStore = defineStore('user', {
       this.user = user;
       const authStore = useAuthStore();
       authStore.user = user; // Sync with guard
-      localStorage.setItem('user', JSON.stringify(user)); // Update localStorage
+      // Ensure token is included when storing user data
+      const userData = { ...user };
+      if (this.token) {
+        userData.token = this.token;
+      }
+      localStorage.setItem('user', JSON.stringify(userData)); // Update localStorage
     },
     setProfile(profile: any) {
       this.username = profile.username;

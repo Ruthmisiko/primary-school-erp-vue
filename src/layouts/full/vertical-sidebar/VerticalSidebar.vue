@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { shallowRef } from 'vue';
+import { shallowRef, computed } from 'vue';
 import { useCustomizerStore } from '../../../stores/customizer';
 import sidebarItems from './sidebarItem';
+import { isSuperAdmin } from '@/utils/auth';
 
 import NavGroup from './NavGroup/NavGroup.vue';
 import NavItem from './NavItem/NavItem.vue';
@@ -10,7 +11,17 @@ import ExtraBox from './extrabox/ExtraBox.vue';
 import Logo from '../logo/LogoMain.vue';
 
 const customizer = useCustomizerStore();
-const sidebarMenu = shallowRef(sidebarItems);
+
+// Filter sidebar items based on user permissions
+const sidebarMenu = computed(() => {
+  if (isSuperAdmin()) {
+    // Show all items including admin items
+    return sidebarItems;
+  } else {
+    // Filter out admin-only items
+    return sidebarItems.filter(item => !item.adminOnly);
+  }
+});
 </script>
 
 <template>

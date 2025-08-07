@@ -47,7 +47,9 @@ async function validate() {
             userStore.setUser(response.data.user);
             // Sync with authStore for guard
             authStore.user = response.data.user; // Match User interface
-            localStorage.setItem('user', JSON.stringify(response.data.user)); // Mimic authStore behavior
+            // Store user with token in localStorage so API interceptor can access it
+            const userDataWithToken = { ...response.data.user, token: response.data.token };
+            localStorage.setItem('user', JSON.stringify(userDataWithToken));
             console.log('Token stored in userStore:', userStore.getAccessToken);
             console.log('User stored in authStore:', authStore.user);
           } else {

@@ -3,6 +3,7 @@ import { ref,computed } from 'vue';
 import { SettingsIcon, LogoutIcon, UserIcon } from 'vue-tabler-icons';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
+import { getUserTypeDisplay } from '@/utils/auth';
 
 const swt1 = ref(true);
 const swt2 = ref(false);
@@ -11,6 +12,10 @@ const router = useRouter();
 
 const userName = computed(() => {
   return authStore.user?.name || 'John Doe'; // Use name from authStore.user, fallback to 'John Doe'
+});
+
+const userType = computed(() => {
+  return authStore.user?.userType ? getUserTypeDisplay(authStore.user.userType) : 'User';
 });
 
 const goToAccountSettings = () => {
@@ -25,7 +30,8 @@ const goToAccountSettings = () => {
   <!-- profile DD -->
   <!-- ---------------------------------------------- -->
   <div class="pa-4">
-    <h4 class="mb-n1">Hae ,<span class="font-weight-regular"><b>{{ userName }}</b></span></h4>
+    <h4 class="mb-n1">Hello, <span class="font-weight-regular"><b>{{ userName }}</b></span></h4>
+    <p class="text-caption text-medium-emphasis mb-2">{{ userType }}</p>
    
 
     <!-- <v-text-field persistent-placeholder placeholder="Search" class="my-3" color="primary" variant="outlined" hide-details>

@@ -179,6 +179,40 @@ const MainRoutes = {
       component: () => import('@/components/views/viewStudent.vue')
     },
     
+    // Admin Routes
+    {
+      name: 'Admin Dashboard',
+      path: '/admin/dashboard',
+      component: () => import('@/views/pages/AdminDashboardPage.vue')
+    },
+    {
+      name: 'Admin Schools',
+      path: '/admin/schools',
+      component: () => import('@/views/pages/SchoolsPage.vue')
+    },
+    {
+      name: 'Admin Users',
+      path: '/admin/users',
+      component: () => import('@/views/pages/AdminUsersPage.vue')
+    },
+    {
+      name: 'admin user form',
+      path: '/admin/user/form',
+      component: () => import('@/components/forms/AdminUserForm.vue')
+    },
+
+    {
+      name: 'school form',
+      path: '/school/form',
+      component: () => import('@/components/forms/SchoolForm.vue')
+    },
+
+    {
+      name: 'Update School form',
+      path: '/edit/school/:id',
+      component: () => import('@/components/forms/SchoolForm.vue')
+    },
+    
   ]
 };
 

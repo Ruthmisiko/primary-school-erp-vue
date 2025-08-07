@@ -8,6 +8,7 @@ import { BellIcon, SettingsIcon, SearchIcon, Menu2Icon } from 'vue-tabler-icons'
 import NotificationDD from './NotificationDD.vue';
 import ProfileDD from './ProfileDD.vue';
 import Searchbar from './SearchBarPanel.vue';
+import { isSuperAdmin } from '@/utils/auth';
 
 const customizer = useCustomizerStore();
 const showSearch = ref(false);
@@ -68,6 +69,17 @@ function searchbox() {
     <!---/Search part -->
 
     <v-spacer />
+    
+    <!-- Admin Indicator -->
+    <v-chip
+      v-if="isSuperAdmin()"
+      color="error"
+      size="small"
+      class="mr-3"
+    >
+      Super Admin
+    </v-chip>
+    
     <!-- ---------------------------------------------- -->
     <!---right part -->
     <!-- ---------------------------------------------- -->

@@ -16,7 +16,9 @@ import {
   AppstoreAddOutlined,
   UnorderedListOutlined,
   UserSwitchOutlined,
-  BarsOutlined, MailOutlined, SolutionOutlined
+  BarsOutlined, MailOutlined, SolutionOutlined,
+  BankOutlined,
+  TeamOutlined
 } from '@ant-design/icons-vue';
 
 export interface menu {
@@ -33,6 +35,7 @@ export interface menu {
   disabled?: boolean;
   type?: string;
   subCaption?: string;
+  adminOnly?: boolean;
 }
 
 const sidebarItem: menu[] = [
@@ -100,11 +103,34 @@ const sidebarItem: menu[] = [
   // },
   { divider: true },
   { header: 'User Profile' },
-  {
+    {
     title: 'Profile',
     icon:   UserSwitchOutlined,
     to: '/profile'
   },
+  
+  // Admin Menu Items - Only shown for super_admin
+  { divider: true },
+  { header: 'System Administration', adminOnly: true },
+  {
+    title: 'Admin Dashboard',
+    icon: DashboardOutlined,
+    to: '/admin/dashboard',
+    adminOnly: true
+  },
+  {
+    title: 'Schools Management',
+    icon: BankOutlined,
+    to: '/admin/schools',
+    adminOnly: true
+  },
+  {
+    title: 'Users Management',
+    icon: TeamOutlined,
+    to: '/admin/users',
+    adminOnly: true
+  },
+  
   // { header: 'Pages' },
   // {
   //   title: 'Authentication',
@@ -164,7 +190,7 @@ const sidebarItem: menu[] = [
   //   ]
   // },
   
- 
+  
 ];
 
 export default sidebarItem;

@@ -36,6 +36,7 @@ router.beforeEach(async (to, from, next) => {
   const authRequired = !isPublicPage && to.matched.some((record) => record.meta.requiresAuth);
 
   console.log('Navigating to:', to.path, 'User:', auth.user, 'Auth required:', authRequired);
+  
   if (authRequired && !auth.user) {
     auth.returnUrl = to.fullPath;
     next('/login');
@@ -44,6 +45,16 @@ router.beforeEach(async (to, from, next) => {
       query: { ...to.query, redirect: auth.returnUrl !== '/' ? auth.returnUrl : undefined }
     });
   } else {
+    // Check admin route authorization
+    if (to.path.startsWith('/admin') && auth.user) {
+      const { canAccessAdminRoutes } = await import('@/utils/auth');
+      if (!canAccessAdminRoutes()) {
+        console.log('Access denied: User does not have admin privileges');
+        next('/dashboard'); // Redirect to dashboard instead of admin routes
+        return;
+      }
+    }
+    
     next();
   }
 });
