@@ -314,10 +314,6 @@ const assignSchool = (user: any) => {
   showAssignDialog.value = true
 }
 
-const handleCreateItem = () => {
-  router.replace(route.query.to ? String(route.query.to) : '/admin/user/form');
-};
-
 const confirmAssignSchool = async () => {
   if (!assignFormValid.value) return
 
