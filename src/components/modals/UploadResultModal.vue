@@ -20,30 +20,59 @@ const handleFileChange = (e: Event) => {
 const uploadFile = async () => {
   if (!selectedFile.value) {
     message.value = 'Please select a file first.';
+    ElNotification({
+      title: 'Warning',
+      message: message.value,
+      type: 'warning',
+    });
     return;
   }
 
   uploading.value = true;
-  const response = await importResults(selectedFile.value);
+  
+  try {
+    const response = await importResults(selectedFile.value);
 
-  if (response?.status === 200) {
-    message.value = 'Results imported successfully.';
-    ElNotification({
-      title: 'Success',
-      message: message.value,
-      type: 'success',
-    });
-    emit('close');
-  } else {
-    message.value = response?.data?.message || 'Upload failed.';
+    console.log('Import response:', response);
+
+    if (response?.status === 200 || response?.data?.success) {
+      const processed = response?.data?.processed || 0;
+      const errors = response?.data?.errors || 0;
+      
+      message.value = `Results imported successfully! Processed: ${processed}, Errors: ${errors}`;
+      
+      ElNotification({
+        title: 'Success',
+        message: message.value,
+        type: 'success',
+        duration: 5000,
+      });
+      
+      // Reload the page to show new results
+      setTimeout(() => {
+        emit('close');
+        window.location.reload();
+      }, 2000);
+    } else {
+      message.value = response?.data?.message || 'Upload failed. Please check the file format.';
+      ElNotification({
+        title: 'Error',
+        message: message.value,
+        type: 'error',
+        duration: 6000,
+      });
+    }
+  } catch (error) {
+    console.error('Upload error:', error);
+    message.value = 'An error occurred during upload.';
     ElNotification({
       title: 'Error',
       message: message.value,
       type: 'error',
     });
+  } finally {
+    uploading.value = false;
   }
-
-  uploading.value = false;
 };
 
 const downloadTemplate = () => {

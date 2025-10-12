@@ -8,6 +8,8 @@ export interface Student{
     paid_fee: number;
     sclass: Result[];
     results: Sclass[];
+    phone_number: string;
+    address: string;
 }
 
 export interface Result{

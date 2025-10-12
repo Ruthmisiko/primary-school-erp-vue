@@ -5,6 +5,7 @@ import TotalOrder from './components/TotalOrder.vue';
 import TotalIncome from './components/TotalIncome.vue';
 import TotalGrowth from './components/TotalGrowth.vue';
 import PopularStocks from './components/PopularStocks.vue';
+import MonthlyEnrollment from './components/MonthlyEnrollment.vue';
 </script>
 
 <template>
@@ -29,10 +30,10 @@ import PopularStocks from './components/PopularStocks.vue';
     </v-col>
 
     <!-- -------------------------------------------------------------------- -->
-    <!-- Total Growth -->
+    <!-- Monthly Enrollment Statistics -->
     <!-- -------------------------------------------------------------------- -->
     <v-col cols="12" lg="8">
-      <TotalGrowth />
+      <MonthlyEnrollment />
     </v-col>
 
     <!-- -------------------------------------------------------------------- -->
@@ -41,5 +42,12 @@ import PopularStocks from './components/PopularStocks.vue';
     <v-col cols="12" lg="4">
       <PopularStocks />
     </v-col>
+
+    <!-- -------------------------------------------------------------------- -->
+    <!-- Total Growth (Optional - can be removed or kept) -->
+    <!-- -------------------------------------------------------------------- -->
+    <!-- <v-col cols="12" lg="8">
+      <TotalGrowth />
+    </v-col> -->
   </v-row>
 </template>

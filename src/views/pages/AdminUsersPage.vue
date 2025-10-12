@@ -14,7 +14,7 @@
             Add User
           </VBtn>
         </div>
-        </v-col>
+      </v-col>
     </v-row>
 
     <!-- Users Table -->
@@ -196,6 +196,7 @@ import { getAdminUsers, createAdminUser, updateAdminUser, assignSchoolToUser, re
 import { fetchSchools } from '@/api/schools'
 import { useRoute } from "vue-router";
 import {router} from "@/router";
+import { PlusOutlined } from '@ant-design/icons-vue';
 
 const loading = ref(false)
 const saving = ref(false)
@@ -419,6 +420,10 @@ const resetForm = () => {
   }
   isEditing.value = false
   selectedUser.value = null
+}
+
+const handleCreateItem = () => {
+  showCreateDialog.value = true
 }
 
 // Watch for dialog changes to reset form when creating new user

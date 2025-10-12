@@ -43,7 +43,9 @@ const form = reactive<Student>({
   fee_balance: 0,
   paid_fee: 0,
   sclass:[],
-  results:[]
+  results:[],
+  address:'',
+  phone_number: ''
 
 })
 
@@ -97,7 +99,9 @@ const fetchStudent = async () => {
         form.parent=response?.data?.data?.parent;
         form.age=response?.data?.data?.age;
         form.fee_balance=response?.data?.data?.fee_balance;
-        form.paid_fee=response?.data?.data?.paid_fee
+        form.paid_fee=response?.data?.data?.paid_fee;
+        form.address=response?.data?.data?.address;
+        form.phone_number=response?.data?.data?.phone_number;
       }
       else { console.log(response) }
     })
@@ -140,7 +144,9 @@ const submitForm = async () => {
             parent: form.parent,
             age: form.age,
             fee_balance: form.fee_balance,
-            paid_fee: form.paid_fee
+            paid_fee: form.paid_fee,
+            address: form.AddressBookIcon,
+            phone_number: form.phone_number
 
           }).then(async (data) => {
             if (data.data.success) {
@@ -178,7 +184,9 @@ const submitForm = async () => {
             parent: form.parent,
             age: form.age,
             fee_balance: form.fee_balance,
-            paid_fee: form.paid_fee
+            paid_fee: form.paid_fee,
+            address: form.AddressBookIcon,
+            phone_number: form.phone_number
           }).then(async (data) => {
             if (data.data.success) {
               ElNotification({
@@ -268,6 +276,7 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                       :rules="requiredRule"
                   />
                 </VCol>
+                
                 <VCol
                     cols="12"
                     md="6"
@@ -328,6 +337,32 @@ const requiredRule = ref<Array<(value: string) => boolean | string>>([
                   disabled
                 />
               </VCol>
+              <VCol
+                    cols="12"
+                    md="6"
+                >
+                  <VTextField
+                      v-model="form.address"
+                      label="Location"
+                      variant="outlined"
+                      placeholder="Location"
+                      validate-on="submit"
+                      :rules="requiredRule"
+                  />
+                </VCol>  
+                <VCol
+                    cols="12"
+                    md="6"
+                >
+                  <VTextField
+                      v-model="form.phone_number"
+                      label="Parents Phone"
+                      variant="outlined"
+                      placeholder="Phone Number"
+                      validate-on="submit"
+                      :rules="requiredRule"
+                  />
+                </VCol> 
 
                 <VCol
                     cols="12"

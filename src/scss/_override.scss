@@ -4,6 +4,31 @@ html {
   }
 }
 
+/* Global Poppins Font */
+* {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+body {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.v-application {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* ApexCharts Font Override */
+.apexcharts-text,
+.apexcharts-legend-text,
+.apexcharts-datalabel,
+.apexcharts-tooltip-text {
+  font-family: 'Poppins', sans-serif !important;
+}
+
 .v-row + .v-row {
   margin-top: 0px;
 }

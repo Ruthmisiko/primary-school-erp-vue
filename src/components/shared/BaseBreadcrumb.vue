@@ -17,10 +17,10 @@ const props = defineProps({
 <template>
   <v-row class="page-breadcrumb mb-1 mt-1">
     <v-col cols="12" md="12">
-      <v-card variant="flat" class="px-4 py-3">
+      <v-card variant="flat" class="px-4 py-4 breadcrumb-card" elevation="2">
         <v-row no-gutters class="align-center">
           <v-col md="5">
-            <h3 class="text-h3">{{ props.title }}</h3>
+            <h3 class="text-h3 font-weight-bold">{{ props.title }}</h3>
           </v-col>
 
           <v-col md="7" sm="12" cols="12">
@@ -49,5 +49,10 @@ const props = defineProps({
   .v-toolbar {
     background: transparent;
   }
+}
+
+.breadcrumb-card {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.12) 100%) !important;
+  border-radius: 12px;
 }
 </style>

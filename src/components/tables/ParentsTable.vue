@@ -8,55 +8,53 @@ import {
   DeleteOutlined
 } from '@ant-design/icons-vue';
 import {ElMessage, ElMessageBox} from "element-plus";
-import {removeUser} from "@/api/users";
-import type {User} from "@/interface/users";
+import {removeParent} from "@/api/parents";
+import type {Parent} from "@/interface/parents";
 import { defineProps} from "vue";
 
 
 const headers = reactive([
   { title: '#', key: 'index' },
-  { title: 'NAME', key: 'name' },
-  { title: 'EMAIL', key: 'email' },
-  { title: 'ROLE', key: 'userType' },
+  { title: 'PARENT NAME', key: 'name' },
+  { title: 'STUDENT NAME', key: 'student_name' },
   { title: 'PHONE NUMBER', key: 'phone_number' },
-  { title: 'SCHOOL NAME', key: 'school_name' },
+  { title: 'ADDRESS', key: 'address' },
   { title: 'ACTION', key: 'action' },
-
 ]);
 
-const emit = defineEmits(['form:cancel','refresh-student']);
+const emit = defineEmits(['form:cancel','refresh-parents', 'edit:parent']);
 const props = defineProps<{
   loading: boolean
-  users: User[]
+  parents: Parent[]
 }>()
 
 
-const formattedUsers = computed(() => {
-  if (!props.users || !props.users) {
-   
+const formattedParents = computed(() => {
+  if (!props.parents || !Array.isArray(props.parents)) {
     return [];
   }
-  return props.users.map((user: any, index: number) => ({
-    ...user,
+  
+  return props.parents.map((parent: any, index: number) => ({
+    ...parent,
     index: index + 1,
-    school_name: user?.school?.name ?? "N/A",
+    student_name: parent?.student?.name || 'N/A',
   }));
 });
 
 
 const searcher = () => {
-  emit('refresh-student')
+  emit('refresh-parents')
 }
 
 const handleViewItem = (id: string) => {
   router.push(`/view/student/${id}`)
 };
-const handleEditItem =  (id: string) => {
-  router.push(`/edit/user/${id}`)
+const handleEditItem = (parent: any) => {
+  emit('edit:parent', parent);
 };
-const handleDeleteItem = (user: any) => {
+const handleDeleteItem = (student: any) => {
   ElMessageBox.confirm(
-      `Delete #${user.name} will be deleted. Continue ?`,
+      `Delete #${student.name} will be deleted. Continue ?`,
       'Delete Student',
       {
         confirmButtonText: 'OK',
@@ -66,13 +64,13 @@ const handleDeleteItem = (user: any) => {
       }
   )
       .then(async () => {
-        const response = await removeUser(user.id);
+        const response = await removeParent(student.id);
         if (response.data.success) {
           ElMessage({
             type: 'success',
             message: response.data.message,
           });
-          emit('refresh-student');
+          emit('refresh-parents');
         }
         else {
           ElMessage({
@@ -83,35 +81,13 @@ const handleDeleteItem = (user: any) => {
       })
 };
 
-const handlePrintItem = async (studentId: string) => {
-  try {
-    const response = await printResult(studentId);
-
-    if (response && response.status === 200) {
-      const blob = new Blob([response.data], { type: 'application/pdf' });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `student-result-${studentId}.pdf`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } else {
-      ElMessage.error("Failed to download result. Please try again.");
-    }
-  } catch (error) {
-    console.error(error);
-    ElMessage.error("An error occurred while printing the result.");
-  }
-};
 
 </script>
 
 <template>
   <VDataTable
       :headers="headers"
-      :items="formattedUsers"
+      :items="formattedParents"
       :loading="props.loading"
       height="500"
       fixed-header
@@ -125,15 +101,12 @@ const handlePrintItem = async (studentId: string) => {
           </VBtn>
         </template>
         <VList>
-          <!-- <VListItem @click="handleViewItem(item.id)">
+          <VListItem @click="handleViewItem(item.id)">
             <EyeOutlined /> <span>VIEW</span>
           </VListItem>
-          <VListItem @click="handleEditItem(item.id)">
+          <VListItem @click="handleEditItem(item)">
             <EditOutlined /> <span>EDIT</span>
-          </VListItem> -->
-          <!-- <VListItem @click="handlePrintItem(item.id)">
-            <EditOutlined /> <span>PRINT RESULT</span>
-          </VListItem> -->
+          </VListItem>
           <VListItem @click="handleDeleteItem(item)">
             <DeleteOutlined /> <span>DELETE</span>
           </VListItem>

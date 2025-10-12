@@ -2,6 +2,12 @@
 .leftSidebar {
   border: 0px;
   box-shadow: none !important;
+  background: linear-gradient(180deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.12) 100%) !important;
+  
+  .v-navigation-drawer__content {
+    background: linear-gradient(180deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.12) 100%) !important;
+  }
+  
   .logo {
     padding-left: 7px;
   }

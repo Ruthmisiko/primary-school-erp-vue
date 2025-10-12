@@ -52,6 +52,11 @@ const sidebarItem: menu[] = [
     icon: UsergroupAddOutlined,
     to: '/students'
   },
+  {
+    title: 'Parents',
+    icon: UsergroupAddOutlined,
+    to: '/parents'
+  },
   { divider: true },
   { header: 'Teachers Management' },
   {
@@ -78,16 +83,24 @@ const sidebarItem: menu[] = [
     icon: BarsOutlined,
     to: '/exams'
   },
-  // {
-  //   title: 'Reports',
-  //   icon: BarsOutlined,
-  //   to: '/reports'
-  // },
   {
     title: 'Results',
     icon: SolutionOutlined,
     to: '/results'
   },
+
+  { header: 'Account Management' },
+  {
+    title: 'Payment Methods',
+    icon: BarsOutlined,
+    to: '/payment-methods'
+  },
+  {
+    title: 'Payments',
+    icon: BarsOutlined,
+    to: '/payments'
+  },
+ 
   
   { divider: true },
   { header: 'User Management' },

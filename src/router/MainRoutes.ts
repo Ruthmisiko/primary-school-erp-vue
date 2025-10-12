@@ -52,7 +52,11 @@ const MainRoutes = {
       path: '/students',
       component: () => import('@/views/pages/StudentsPage.vue')
     },
-
+    {
+      name: 'parents',
+      path: '/parents',
+      component: () => import('@/views/pages/ParentsPage.vue')
+    },
     {
       name: 'student form',
       path: '/student/form',
@@ -104,6 +108,17 @@ const MainRoutes = {
       component: () => import('@/components/forms/SubjectForm.vue')
     },
 
+    {
+      name: 'payment methods',
+      path: '/payment-methods',
+      component: () => import('@/views/pages/PaymentMethodsPage.vue')
+    },
+
+    {
+      name: 'payment method form',
+      path: '/payment-method/form',
+      component: () => import('@/components/forms/PaymentMethodForm.vue')
+    },
     {
       name: 'exams',
       path: '/exams',
@@ -177,6 +192,17 @@ const MainRoutes = {
       name: 'view user',
       path: '/view/user/:id',
       component: () => import('@/components/views/viewStudent.vue')
+    },
+    {
+      name: 'payments',
+      path: '/payments',
+      component: () => import('@/views/pages/PaymentsPage.vue')
+    },
+
+    {
+      name: 'view payment',
+      path: '/view/payment/:id',
+      component: () => import('@/components/views/viewPayment.vue')
     },
     
     // Admin Routes
