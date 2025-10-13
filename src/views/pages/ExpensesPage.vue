@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import {ref, shallowRef, onMounted, reactive} from 'vue';
+import { ref, shallowRef, onMounted, reactive } from 'vue';
 import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
-import PaymentMethodsTable from "@/components/tables/PaymentMethodsTable.vue";
-import PaymentMethodFormModal from "@/components/forms/PaymentMethodFormModal.vue";
-import { fetchMethods} from "@/api/paymentMethods";
+import ExpensesTable from "@/components/tables/ExpensesTable.vue";
+import ExpenseFormModal from "@/components/forms/ExpenseFormModal.vue";
+import { fetchExpenses } from "@/api/expenses";
 import { useRoute } from "vue-router";
-import {router} from "@/router";
-import type {PaymentMethod} from "@/interface/paymentMethods";
-import type {IFilter, IPagination} from "@/interface/shared";
+import type { Expense } from "@/interface/expenses";
+import type { IFilter, IPagination } from "@/interface/shared";
+import { PlusOutlined } from '@ant-design/icons-vue';
 
 const route = useRoute();
 const loading = ref(true);
-const searchField = ref('')
+const searchField = ref('');
 const showFilter = ref(true);
 const dialog = ref(false);
-const showPaymentMethodModal = ref(false);
-const selectedPaymentMethod = ref<PaymentMethod | null>(null);
+const showExpenseModal = ref(false);
+const selectedExpense = ref<Expense | null>(null);
 const isEditing = ref(false);
-const methods = ref<PaymentMethod[]>([])
-const page = ref({ title: 'Payment Methods' });
+const expenses = ref<Expense[]>([])
+const page = ref({ title: 'Expenses' });
 const pagination = reactive<IPagination>({
   total: 0,
   per_page: 0,
@@ -27,13 +27,11 @@ const pagination = reactive<IPagination>({
 });
 const breadcrumbs = shallowRef([
   {
-    title: 'Payment Methods',
+    title: 'Expenses',
     disabled: true,
-    href: '/payment-methods'
+    href: '/expenses'
   }
 ]);
-
-
 
 onMounted(() => {
   const filter = {
@@ -45,20 +43,20 @@ onMounted(() => {
 })
 
 const handleCreateItem = () => {
-  selectedPaymentMethod.value = null;
+  selectedExpense.value = null;
   isEditing.value = false;
-  showPaymentMethodModal.value = true;
+  showExpenseModal.value = true;
 };
 
-const handleEditItem = (paymentMethod: PaymentMethod) => {
-  selectedPaymentMethod.value = paymentMethod;
+const handleEditItem = (expense: Expense) => {
+  selectedExpense.value = expense;
   isEditing.value = true;
-  showPaymentMethodModal.value = true;
+  showExpenseModal.value = true;
 };
 
-const handlePaymentMethodSaved = () => {
-  showPaymentMethodModal.value = false;
-  selectedPaymentMethod.value = null;
+const handleExpenseSaved = () => {
+  showExpenseModal.value = false;
+  selectedExpense.value = null;
   isEditing.value = false;
   const filter = {
     page: 1,
@@ -71,12 +69,12 @@ const handlePaymentMethodSaved = () => {
 const loadData = async (filter: IFilter) => {
   loading.value = true;
   try {
-    const response = await fetchMethods(filter);
+    const response = await fetchExpenses(filter);
    
     if (response.data?.data) {
-      methods.value = response.data.data; 
+      expenses.value = response.data.data; 
     } else {
-      methods.value = [];
+      expenses.value = [];
     }
 
     const data = response.data;
@@ -85,55 +83,39 @@ const loadData = async (filter: IFilter) => {
     pagination.current_page = data.current_page ?? 1;
     pagination.total_pages = pagination.per_page > 0 ? Math.ceil(pagination.total / pagination.per_page) : 0;
   } catch (error) {
-    console.error("Error fetching methods:", error);
+    console.error("Error fetching expenses:", error);
   } finally {
     loading.value = false;
   }
 };
-const searcher = () => {
-  const filter = {
-    page: 1,
-    orderBy: 'created_at',
-    sortedBy: 'desc'
-  }
-  loadData(filter)
-}
-const refreshEvent = () => {
-  const filter = {
-    page: 1,
-    orderBy: 'created_at',
-    sortedBy: 'desc',
-  }
-  loadData(filter);
-}
 
 const handleApplyFilter = () => {
-
   const filter = {
     page: 1,
     orderBy: 'created_at',
     sortedBy: 'desc',
     search: searchField.value,
-    searchFields: `name:like;tittle:like;location:like;subtitle:like;city:like;country:like;`,
+    searchFields: `category:like;description:like;payment_method:like;`,
   }
   loadData(filter);
 };
+
 const handleRefreshItem = () => {
   const filter = {
     page: 1,
     orderBy: 'created_at',
     sortedBy: 'desc',
   }
-
   loadData(filter);
 };
+
 const handleClear = () => {
+  searchField.value = '';
   const filter = {
     page: 1,
     orderBy: 'created_at',
     sortedBy: 'desc',
   }
-
   loadData(filter);
 };
 
@@ -148,50 +130,50 @@ const handleClear = () => {
           <VRow class="d-flex justify-space-between">
             <VCol cols="4">
               <VTextField
-                  variant="outlined"
-                  placeholder="Type something"
-                  hide-details
-                  clearable
-                  v-model="searchField"
-                  class="search"
-                  @keyup.enter="handleApplyFilter"
-                  @click:prepend="showFilter = !showFilter"
-                  @click:clear="handleClear"
+                variant="outlined"
+                placeholder="Search expenses..."
+                hide-details
+                clearable
+                v-model="searchField"
+                class="search"
+                @keyup.enter="handleApplyFilter"
+                @click:prepend="showFilter = !showFilter"
+                @click:clear="handleClear"
               />
             </VCol>
             <VCol class="d-flex justify-end">
               <VBtn
-                  @click="handleCreateItem"
-                  color="primary"
+                @click="handleCreateItem"
+                color="primary"
               >
                 <template v-slot:prepend>
                   <PlusOutlined />
                 </template>
-                Add Payment Method
+                Add Expense
               </VBtn>
             </VCol>
           </VRow>
         </VCardItem>
         <VCardText class="pa-0 pb-5">
           <VDivider />
-          <PaymentMethodsTable
-            :methods="methods"
+          <ExpensesTable
+            :expenses="expenses"
             :pagination="pagination"
             :dialog="dialog"
             :loading="loading"
             @form:cancel="dialog = false"
             @edit:item="handleEditItem"
-            @refresh-method="handleRefreshItem"
+            @refresh-expense="handleRefreshItem"
           />
         </VCardText>
       </VCard>
       
-      <!-- Payment Method Form Modal -->
-      <PaymentMethodFormModal 
-        v-model="showPaymentMethodModal" 
-        :payment-method="selectedPaymentMethod"
+      <!-- Expense Form Modal -->
+      <ExpenseFormModal 
+        v-model="showExpenseModal" 
+        :expense="selectedExpense"
         :is-editing="isEditing"
-        @saved="handlePaymentMethodSaved"
+        @saved="handleExpenseSaved"
       />
     </VCol>
   </VRow>

@@ -21,7 +21,7 @@ const headers = reactive([
 
 ]);
 
-const emit = defineEmits(['form:cancel','refresh-method']);
+const emit = defineEmits(['form:cancel','refresh-method','edit:item']);
 const props = defineProps<{
   loading: boolean
   methods: PaymentMethod[]
@@ -44,11 +44,8 @@ const searcher = () => {
   emit('refresh-method')
 }
 
-const handleViewItem = (id: string) => {
-  router.push(`/view/subject/${id}`)
-};
-const handleEditItem =  (id: string) => {
-  router.push(`/edit/subject/${id}`)
+const handleEditItem =  (method: PaymentMethod) => {
+  emit('edit:item', method)
 };
 const handleDeleteItem = (method: any) => {
   ElMessageBox.confirm(
@@ -98,8 +95,7 @@ const handleDeleteItem = (method: any) => {
           </VBtn>
         </template>
         <VList>
-        
-          <VListItem @click="handleEditItem(item.id)">
+          <VListItem @click="handleEditItem(item)">
             <EditOutlined /> <span>EDIT</span>
           </VListItem>
           <VListItem @click="handleDeleteItem(item)">

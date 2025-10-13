@@ -18,7 +18,15 @@ import {
   UserSwitchOutlined,
   BarsOutlined, MailOutlined, SolutionOutlined,
   BankOutlined,
-  TeamOutlined
+  TeamOutlined,
+  ShopOutlined,
+  AccountBookOutlined,
+  CreditCardOutlined,
+  DollarOutlined,
+  ReadOutlined,
+  BookOutlined,
+  UserOutlined,
+  ContactsOutlined
 } from '@ant-design/icons-vue';
 
 export interface menu {
@@ -49,12 +57,12 @@ const sidebarItem: menu[] = [
   { header: 'Students Management' },
   {
     title: 'Students',
-    icon: UsergroupAddOutlined,
+    icon: UserOutlined,
     to: '/students'
   },
   {
     title: 'Parents',
-    icon: UsergroupAddOutlined,
+    icon: ContactsOutlined,
     to: '/parents'
   },
   { divider: true },
@@ -68,12 +76,12 @@ const sidebarItem: menu[] = [
   { header: 'Class Management' },
   {
     title: 'Classes',
-    icon: CircleIcon,
+    icon: ReadOutlined,
     to: '/classes'
   },
   {
     title: 'Subjects',
-    icon: LineChartOutlined,
+    icon: BookOutlined,
     to: '/subjects'
   },
   { divider: true },
@@ -92,13 +100,25 @@ const sidebarItem: menu[] = [
   { header: 'Account Management' },
   {
     title: 'Payment Methods',
-    icon: BarsOutlined,
+    icon: CreditCardOutlined,
     to: '/payment-methods'
   },
   {
     title: 'Payments',
-    icon: BarsOutlined,
+    icon: DollarOutlined,
     to: '/payments'
+  },
+
+  { header: 'Expense Management' },
+  {
+    title: 'Suppliers',
+    icon: ShopOutlined,
+    to: '/suppliers'
+  },
+  {
+    title: 'Expenses',
+    icon: AccountBookOutlined,
+    to: '/expenses'
   },
  
   

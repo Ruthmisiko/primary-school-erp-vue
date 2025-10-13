@@ -6,6 +6,9 @@ import TotalIncome from './components/TotalIncome.vue';
 import TotalGrowth from './components/TotalGrowth.vue';
 import PopularStocks from './components/PopularStocks.vue';
 import MonthlyEnrollment from './components/MonthlyEnrollment.vue';
+import TotalSuppliers from './components/TotalSuppliers.vue';
+import TotalExpenses from './components/TotalExpenses.vue';
+import MonthlyExpenseChart from './components/MonthlyExpenseChart.vue';
 </script>
 
 <template>
@@ -37,10 +40,20 @@ import MonthlyEnrollment from './components/MonthlyEnrollment.vue';
     </v-col>
 
     <!-- -------------------------------------------------------------------- -->
-    <!-- Popular Stocks -->
+    <!-- Total Suppliers and Expenses -->
     <!-- -------------------------------------------------------------------- -->
     <v-col cols="12" lg="4">
-      <PopularStocks />
+      <v-row>
+        <v-col cols="12">
+          <TotalSuppliers />
+        </v-col>
+        <v-col cols="12">
+          <TotalExpenses />
+        </v-col>
+        <v-col cols="12">
+          <MonthlyExpenseChart />
+        </v-col>
+      </v-row>
     </v-col>
 
     <!-- -------------------------------------------------------------------- -->

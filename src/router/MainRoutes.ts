@@ -204,6 +204,18 @@ const MainRoutes = {
       path: '/view/payment/:id',
       component: () => import('@/components/views/viewPayment.vue')
     },
+
+    {
+      name: 'suppliers',
+      path: '/suppliers',
+      component: () => import('@/views/pages/SuppliersPage.vue')
+    },
+
+    {
+      name: 'expenses',
+      path: '/expenses',
+      component: () => import('@/views/pages/ExpensesPage.vue')
+    },
     
     // Admin Routes
     {

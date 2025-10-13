@@ -252,17 +252,7 @@ const closeEditModal = () => {
                   @click:clear="handleClear"
               />
             </VCol>
-            <VCol class="d-flex justify-end">
-              <VBtn
-                @click="handleCreateItem"
-                color="primary"
-              >
-                <template v-slot:prepend>
-                  <PlusOutlined />
-                </template>
-                Add Parent
-              </VBtn>
-            </VCol>
+           
           </VRow>
         </VCardItem>
         <VCardText class="pa-0 pb-5">
