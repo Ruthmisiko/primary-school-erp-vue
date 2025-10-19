@@ -56,7 +56,9 @@ async function validate() {
             console.error('setToken is not a function');
             throw new Error('User store is not properly configured');
           }
-          await router.push('/dashboard').catch((error) => {
+          // Redirect based on user type
+          const redirectPath = response.data.user.userType === 'parent' ? '/parent/dashboard' : '/dashboard';
+          await router.push(redirectPath).catch((error) => {
             console.error('Navigation error:', error);
             ElNotification({
               title: 'Error',
@@ -65,7 +67,7 @@ async function validate() {
             });
             throw error;
           });
-          console.log('Redirected to /dashboard');
+          console.log('Redirected to', redirectPath);
         } catch (error) {
           console.error('Router or store error:', error);
           ElNotification({

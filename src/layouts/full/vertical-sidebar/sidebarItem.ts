@@ -26,7 +26,8 @@ import {
   ReadOutlined,
   BookOutlined,
   UserOutlined,
-  ContactsOutlined
+  ContactsOutlined,
+  CalendarOutlined
 } from '@ant-design/icons-vue';
 
 export interface menu {
@@ -52,6 +53,11 @@ const sidebarItem: menu[] = [
     title: 'Default',
     icon: DashboardIcon,
     to: '/dashboard'
+  },
+  {
+    title: 'Events',
+    icon: CalendarOutlined,
+    to: '/events'
   },
 
   { header: 'Students Management' },

@@ -17,6 +17,11 @@ const MainRoutes = {
       component: () => import('@/views/dashboards/default/DefaultDashboard.vue')
     },
     {
+      name: 'Events',
+      path: '/events',
+      component: () => import('@/views/pages/EventsPage.vue')
+    },
+    {
       name: 'Starter',
       path: '/starter',
       component: () => import('@/views/StarterPage.vue')
