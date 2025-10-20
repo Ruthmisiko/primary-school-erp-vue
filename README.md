@@ -1,9 +1,9 @@
-# Berry Free Vue Material Admin Template [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Get%20Berry%20React%20-%20The%20most%20beautiful%20Material%20designed%20Admin%20Dashboard%20Template%20&url=https://berrydashboard.io&via=codedthemes&hashtags=reactjs,webdev,developers,javascript)
+# SCMartSchool System - School Management Dashboard [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=SCMartSchool%20System%20-%20A%20comprehensive%20school%20management%20dashboard%20built%20with%20Vue%20and%20Vuetify&url=https://github.com&via=codedthemes&hashtags=vuejs,webdev,developers,javascript,schoolmanagement)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/codedthemes/berry-free-vue-admin-template/blob/main/LICENSE)
 
-Berry is a free Material admin dashboard template built with Vue. It is meant to provide the best possible User Experience with highly customizable feature-rich pages. It is a complete Dashboard Template that has easy and intuitive responsive design whether it is viewed on retina screens or laptops.
+SCMartSchool System is a comprehensive school management dashboard built with Vue and Vuetify. It is designed to provide the best possible User Experience for school administrators, teachers, and parents with highly customizable feature-rich pages. It is a complete School Management System that has easy and intuitive responsive design whether it is viewed on retina screens or laptops.
 
 :star: :star: :star: Do not forget to star (Top right of this page) it if you like the theme :star: :star: :star:
 
