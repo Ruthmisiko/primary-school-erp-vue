@@ -37,6 +37,13 @@ export const removePayment = async (id: string) => {
         .catch(e => e.response)
 }
 
+export const initiatePayment = async (postBody: any) => {
+    return await api
+        .post('payments/initiate', postBody)
+        .then(response => response)
+        .catch(e => e.response)
+}
+
 export const fetchPaymentMethods = async () => {
     return await api
         .get('payment-methods')

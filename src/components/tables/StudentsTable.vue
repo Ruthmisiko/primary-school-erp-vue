@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { reactive, computed } from "vue";
+import { reactive, computed, ref } from "vue";
 import {router} from "@/router";
 import {
   EditOutlined,
   EyeOutlined,
   MoreOutlined,
-  DeleteOutlined
+  DeleteOutlined,
+  CreditCardOutlined
 } from '@ant-design/icons-vue';
 import {ElMessage, ElMessageBox} from "element-plus";
 import {removeStudent, printResult} from "@/api/students";
 import type {Student} from "@/interface/students";
 import { defineProps} from "vue";
+import PaymentInitiationModal from '@/components/modals/PaymentInitiationModal.vue';
 
 
 const headers = reactive([
@@ -28,6 +30,10 @@ const props = defineProps<{
   loading: boolean
   students: Student[]
 }>()
+
+// Payment modal state
+const paymentModalOpen = ref(false);
+const selectedStudent = ref(null);
 
 
 const formattedStudents = computed(() => {
@@ -105,6 +111,23 @@ const handlePrintItem = async (studentId: string) => {
   }
 };
 
+const handleInitiatePayment = (student: any) => {
+  console.log('Student being passed to modal:', student);
+  console.log('Student keys:', Object.keys(student));
+  console.log('Student ID field:', student.id);
+  selectedStudent.value = student;
+  paymentModalOpen.value = true;
+};
+
+const closePaymentModal = () => {
+  paymentModalOpen.value = false;
+  selectedStudent.value = null;
+};
+
+const onPaymentSuccess = () => {
+  emit('refresh-student');
+};
+
 </script>
 
 <template>
@@ -130,6 +153,9 @@ const handlePrintItem = async (studentId: string) => {
           <VListItem @click="handleEditItem(item.id)">
             <EditOutlined /> <span>EDIT</span>
           </VListItem>
+          <VListItem @click="handleInitiatePayment(item)">
+            <CreditCardOutlined /> <span>INITIATE PAYMENT</span>
+          </VListItem>
           <VListItem @click="handlePrintItem(item.id)">
             <EditOutlined /> <span>PRINT RESULT</span>
           </VListItem>
@@ -140,6 +166,14 @@ const handlePrintItem = async (studentId: string) => {
       </VMenu>
     </template>
   </VDataTable>
+
+  <!-- Payment Initiation Modal -->
+  <PaymentInitiationModal
+    :open="paymentModalOpen"
+    :student="selectedStudent"
+    @close="closePaymentModal"
+    @success="onPaymentSuccess"
+  />
 </template>
 
 <style scoped>

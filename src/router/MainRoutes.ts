@@ -205,6 +205,12 @@ const MainRoutes = {
     },
 
     {
+      name: 'communication',
+      path: '/communication',
+      component: () => import('@/views/pages/CommunicationPage.vue')
+    },
+
+    {
       name: 'view payment',
       path: '/view/payment/:id',
       component: () => import('@/components/views/viewPayment.vue')

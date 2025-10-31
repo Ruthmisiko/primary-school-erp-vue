@@ -5,7 +5,8 @@ import {
   EditOutlined,
   EyeOutlined,
   MoreOutlined,
-  DeleteOutlined
+  DeleteOutlined,
+  CreditCardOutlined
 } from '@ant-design/icons-vue';
 import {ElMessage, ElMessageBox} from "element-plus";
 import {printResult} from "@/api/students";
@@ -108,6 +109,35 @@ const getStatusColor = (status: string) => {
   }
 };
 
+const handleRequestPayment = (payment: any) => {
+  try {
+    // Check if payment has callback data with authorization URL
+    if (payment.callback_data && payment.callback_data.data && payment.callback_data.data.authorization_url) {
+      const authorizationUrl = payment.callback_data.data.authorization_url;
+      console.log('Opening Paystack authorization URL:', authorizationUrl);
+      
+      // Open the Paystack authorization URL in a new tab
+      window.open(authorizationUrl, '_blank');
+      
+      ElMessage({
+        type: 'info',
+        message: 'Opening payment page in new tab...',
+      });
+    } else {
+      ElMessage({
+        type: 'error',
+        message: 'No authorization URL found for this payment',
+      });
+    }
+  } catch (error) {
+    console.error('Error opening payment URL:', error);
+    ElMessage({
+      type: 'error',
+      message: 'Failed to open payment page',
+    });
+  }
+};
+
 </script>
 
 <template>
@@ -140,6 +170,12 @@ const getStatusColor = (status: string) => {
         <VList>
           <VListItem @click="handleViewItem(item.id)">
             <EyeOutlined /> <span>VIEW</span>
+          </VListItem>
+          <VListItem 
+            v-if="item.status === 'PENDING' && item.callback_data?.data?.authorization_url"
+            @click="handleRequestPayment(item)"
+          >
+            <CreditCardOutlined /> <span>REQUEST PAYMENT</span>
           </VListItem>
         </VList>
       </VMenu>

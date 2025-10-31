@@ -10,6 +10,7 @@ import type {IFilter, IPagination} from "@/interface/shared";
 import UploadStudentModal from "@/components/modals/UploadStudentModal.vue";
 import { exportStudents } from "@/api/students";
 import PaymentFormModal from "@/components/forms/PaymentFormModal.vue";
+import { CloudUploadOutlined, PlusOutlined } from '@ant-design/icons-vue';
 
 
 const route = useRoute();

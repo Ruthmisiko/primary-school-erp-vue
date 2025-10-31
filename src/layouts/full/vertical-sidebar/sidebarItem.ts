@@ -105,6 +105,11 @@ const sidebarItem: menu[] = [
 
   { header: 'Account Management' },
   {
+    title: 'Communication',
+    icon: MailOutlined,
+    to: '/communication'
+  },
+  {
     title: 'Payment Methods',
     icon: CreditCardOutlined,
     to: '/payment-methods'
